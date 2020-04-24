@@ -1,0 +1,52 @@
+services:
+    arturdoruch_eventlogger.exception_formatter:
+        class: ArturDoruch\Tool\Exception\ExceptionFormatter
+        arguments: ['../../../']
+
+    arturdoruch_eventlogger.event_logger:
+        class: ArturDoruch\EventLoggerBundle\EventLogger
+        autowire: true
+
+    arturdoruch_eventlogger.event_processor.exception_processor:
+        class: ArturDoruch\EventLoggerBundle\EventProcessor\ExceptionProcessor
+        arguments: ['@arturdoruch_eventlogger.exception_formatter']
+
+    arturdoruch_eventlogger.database_log_handler:
+        class: ArturDoruch\EventLoggerBundle\Log\Handler\DatabaseLogHandler
+        autowire: true
+
+    # Log viewing
+    arturdoruch_eventlogger.entity_log_manager:
+        class: ArturDoruch\EventLoggerBundle\Entity\LogManager
+        arguments:
+            - '@doctrine'
+            - '@arturdoruch_eventlogger.log_property_collection'
+            - '%arturdoruch_eventlogger.log.entity_class%'
+            - '@twig'
+
+    arturdoruch_eventlogger.database_log_driver:
+        class: ArturDoruch\EventLoggerBundle\Log\Driver\DatabaseLogDriver
+        arguments:
+            - '@arturdoruch_eventlogger.entity_log_manager'
+            - '@arturdoruch_eventlogger.log_metadata'
+
+    arturdoruch_eventlogger.form.log_filter_type:
+        class: ArturDoruch\EventLoggerBundle\Form\LogFilterType
+        arguments: ['@arturdoruch_eventlogger.log_property_collection']
+        public: false
+        tags:
+            - { name: form.type }
+
+    arturdoruch_eventlogger.twig.misc_extension:
+        class: ArturDoruch\EventLoggerBundle\Twig\Extension\MiscExtension
+        arguments: ['%arturdoruch_eventlogger.templating.base_template%']
+        public: false
+        tags:
+            - { name: twig.extension }
+
+    arturdoruch_eventlogger.twig.log_context_extension:
+        class: ArturDoruch\EventLoggerBundle\Twig\Extension\LogContextExtension
+        autowire: true
+        public: false
+        tags:
+            - { name: twig.extension }

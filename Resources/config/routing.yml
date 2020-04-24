@@ -1,0 +1,3 @@
+arturdoruch_eventlogger:
+    resource: "@ArturDoruchEventLoggerBundle/Controller/LogController.php"
+    type: annotation

@@ -1,0 +1,34 @@
+{% extends arturdoruch_eventlogger_base_template() %}
+
+{% set windowTitle %}Purge event logs{% endset %}
+{% set pageTitle %}Purge event logs{% endset %}
+
+{% block content %}
+    <form name="ad-log__purge-logs" method="post">
+        <div class="row col-md-4 col-md-offset-4">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 150px">Category</th>
+                        <th class="text-right" style="width: 100px">Total logs</th>
+                        <th class="text-center">Purge</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td class="text-right">{{ category.totalLogs }}</td>
+                        <td class="text-center">
+                            <button name="purge[{{ category.name }}]" class="btn ad__btn-icon text-danger" type="submit"
+                                    formaction="{{ path('arturdoruch_eventlogger_log_purge', {token: csrf_token('purge')}) }}">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+{% endblock %}

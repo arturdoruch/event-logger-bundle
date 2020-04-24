@@ -1,0 +1,30 @@
+{% macro render(context) %}
+    {% import _self as renderer %}
+
+    {% if context is not iterable %}
+        {{ context|raw }}
+    {% elseif context|length > 0 %}
+        {% set listTag = 'ul' %}
+        {% set isList = context.0 is defined %}
+
+        {% if not isList and context.1 is defined %}
+            {% set listTag = 'ol' %}
+            {% set isList = true %}
+        {% endif %}
+        <{{ listTag }} class="ad-log__ul-list{% if isList %} ad-log__ul-list-styled{% endif %}">
+            {% for name, value in context %}
+            <li>
+                {% set value = arturdoruch_eventlogger_convert_object(value) %}
+                {% set value = arturdoruch_eventlogger_format_value(name, value) %}
+
+                {% if not isList %}<b>{{ name }}</b>:{% endif %}
+                {% if value is iterable %}
+                    {{ renderer.render(value) }}
+                {% else %}
+                    {{ value|raw }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </{{ listTag }}>
+    {% endif %}
+{% endmacro %}

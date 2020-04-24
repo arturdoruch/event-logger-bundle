@@ -1,0 +1,101 @@
+{% extends app.request.xmlHttpRequest ?
+    '@ArturDoruchEventLogger/ajax_layout.html.twig':
+    arturdoruch_eventlogger_base_template()
+%}
+
+{% set createdAt = log.createdAt|arturdoruch_eventlogger_format_date(logPropertyCollection.get('createdAt').format) %}
+{% set _title %}Event log: {{ log.category }} {{ log.level }}{% endset %}
+{% set windowTitle %}{{ _title }}{% endset %}
+{% set pageTitle %}{{ _title }} <small>at {{ createdAt }}</small>{% endset %}
+
+{% block content %}
+    <article id="ad-log__log">
+        <form name="ad-log__manage" method="post">
+            <div class="ad-log__action-bar">
+                {% set changeStatePath = path('arturdoruch_eventlogger_log_changestate', { id: log.id }) %}
+                {% for state, stateName in logStates %}
+                    <button data-log-action="change-state"  type="submit" name="state" value="{{ state }}"
+                            formaction="{{ changeStatePath }}"
+                            class="btn btn-{{ cssClassHelper.colorClass(state) }} btn-sm">
+                        <span class="glyphicon {{ cssClassHelper.glyphiconClass(state) }}"></span> {{ stateName|humanize }}
+                    </button>
+                {% endfor %}
+                <button class="btn btn-danger btn-sm" data-log-action="remove" type="submit"
+                        formaction="{{ path('arturdoruch_eventlogger_log_remove', { id: log.id, token: csrf_token('remove') }) }}">
+                    <span class="glyphicon glyphicon-trash"></span> Remove
+                </button>
+                <a data-log-action="copy-url" class="btn btn-default btn-sm"
+                   href="{{ path('arturdoruch_eventlogger_log_show', { id: log.id }) }}">
+                    <span class="glyphicon glyphicon-link"></span> Copy url
+                </a>
+
+                {% if app.request.xmlHttpRequest %}
+                    <button data-log-action="close" type="button">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                {% else %}
+                    <a class="btn btn-default btn-sm" style="float: right" href="{{ path('arturdoruch_eventlogger_log_list', {'filter[category]': log.category}) }}" data-log-action="view-list">
+                        <span class="glyphicon glyphicon-list"></span> View list
+                    </a>
+                {% endif %}
+            </div>
+            <input type="hidden" name="logView" value="true"/>
+        </form>
+
+        <div id="ad-log__log-info">
+        <table class="table table-condensed">
+            <tbody>
+                <tr class="bg-{{ cssClassHelper.colorClass(log.state) }} ad-log__log-state-row">
+                    <th>State</th>
+                    <td data-log-state>
+                        {{ log.stateString|humanize }}
+                    </td>
+                    <th>{% if log.changedStateAt %}Changed state at{% endif %}</th>
+                    <td data-log-changed-state-at>{{ log.changedStateAt|arturdoruch_eventlogger_format_date(logPropertyCollection.get('changedStateAt').format) }}</td>
+                </tr>
+                <tr>
+                    <th>Created at</th>
+                    <td>{{ createdAt }}</td>
+                    <th>Id</th>
+                    <td>{{ log.id }}</td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td>{{ log.category }}</td>
+                    <th>Level</th>
+                    <td>{{ log.level }}</td>
+                </tr>
+            {% set extraProperties = logPropertyCollection.extra %}
+                {% for property in extraProperties %}
+                    <tr>
+                        <th>{{ property.label }}</th>
+                        <td colspan="3">
+                            {% set value = log.get(property.name) %}
+                            {% if property.type == 'datetime' %}
+                                {{ value|arturdoruch_eventlogger_format_date(property.format) }}
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <th>Action</th>
+                    <td colspan="3">{{ log.action }}</td>
+                </tr>
+                <tr>
+                    <th>Message</th>
+                    <td colspan="3">
+                        <div class="ad-log__log-message">{{ log.message }}</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+
+        <div id="ad-log__log-context">
+        {{ include('@ArturDoruchEventLogger/log/context.html.twig', {context: log.context}) }}
+        </div>
+    </article>
+    <div style="display: none" data-page-route="{{ app.request.get('_route') }}"></div>
+{% endblock %}

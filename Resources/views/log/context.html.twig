@@ -1,0 +1,16 @@
+{% import '@ArturDoruchEventLogger/log/context_renderer.html.twig' as contextRenderer %}
+<h2>Context</h2>
+<table class="table">
+    <tbody>
+    {% for name, value in context %}
+        <tr>
+            <th>{{ name|humanize }}</th>
+            <td>
+                {% set value = arturdoruch_eventlogger_convert_object(value) %}
+                {% set value = arturdoruch_eventlogger_format_value(name, value) %}
+                {{ contextRenderer.render(value) }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

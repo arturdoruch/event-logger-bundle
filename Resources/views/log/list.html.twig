@@ -1,0 +1,98 @@
+{% extends app.request.xmlHttpRequest ?
+    '@ArturDoruchEventLogger/ajax_list.html.twig' :
+    arturdoruch_eventlogger_base_template()
+%}
+
+{% set windowTitle = 'Event logs' %}
+{% set pageTitle = 'Event logs' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('bundles/arturdoruchjsvendor/js/jquery/ui/jquery-ui.min.css') }}" />
+{% endblock %}
+
+{% block content %}
+    {{ arturdoruch_list_filter_form(logList.filterForm) }}
+
+    <div id="ad-log__list-container">
+    {% block arturdoruch_eventlogger_list %}
+        {% if logList|length > 0 %}
+            {{ arturdoruch_list_items_and_pagination(logList.pagination) }}
+
+        <form name="ad-log__manage-logs" method="post">
+            <div class="ad-log__action-bar">
+                {% set changeStateManyPath = path('arturdoruch_eventlogger_log_changestatemany') %}
+                {% for state, stateString in logStates %}
+                    <button data-log-action="change-state-many" class="btn btn-{{ cssClassHelper.colorClass(state) }} btn-sm" type="submit"
+                            name="state" value="{{ state }}" formaction="{{ changeStateManyPath }}">
+                        <span class="glyphicon {{ cssClassHelper.glyphiconClass(state) }}"></span> {{ stateString|humanize }}
+                    </button>
+                {% endfor %}
+                <button data-log-action="remove-many" class="btn btn-danger btn-sm" type="submit" formaction="{{ path('arturdoruch_eventlogger_log_removemany') }}">
+                    <span class="glyphicon glyphicon-trash"></span> Remove
+                </button>
+            </div>
+
+            <table class="table table-hover ad-log__list">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" name="select-all-logs" /></th>
+                        {% for property in listableProperties %}
+                            {% if property.isSortable %}
+                            <th>{{ arturdoruch_list_sort_link(property.label, property.name, property.sortingDefaultDirection) }}</th>
+                            {% else %}
+                            <th>{{ property.label }}</th>
+                            {% endif %}
+                        {% endfor %}
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for log in logList %}
+                    {% set logUrl = path('arturdoruch_eventlogger_log_show', {id: log.id}) %}
+                    <tr>
+                        <td class="bg-{{ cssClassHelper.colorClass(log.state) }}">
+                            <input type="checkbox" name="ids[]" value="{{ log.id }}" />
+                        </td>
+                        {% for property in listableProperties %}
+                            <td class="ad-log__log-{{ property.name }}{% if property.isType('integer') %} text-right{% endif %}">
+                                {% set value = log.get(property.name) %}
+                                {% if value %}
+                                    {% if property.type == 'datetime' %}
+                                        {{ value|date(property.format) }}
+                                    {% else %}
+                                        {% if property.name == 'message' %}
+                                            <a data-show-log href="{{ logUrl }}">{{ value|truncate(180) }}</a>
+                                        {% else %}
+                                            {{ value }}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        {% endfor %}
+                        <td>
+                            {% set changeStatePath = path('arturdoruch_eventlogger_log_changestate', {id: log.id}) %}
+                            {% for state, stateString in logStates %}
+                                <button data-log-action="change-state" class="ad__btn-icon text-{{ cssClassHelper.colorClass(state) }} glyphicon {{ cssClassHelper.glyphiconClass(state) }}"
+                                        name="state" value="{{ state }}" formaction="{{ changeStatePath }}">
+                                </button>
+                            {% endfor %}
+                            <button data-log-action="remove" class="ad__btn-icon text-danger glyphicon glyphicon-trash"
+                                    formaction="{{ path('arturdoruch_eventlogger_log_remove', {id: log.id, token: csrf_token('remove')}) }}">
+                            </button>
+                            &nbsp;
+                            <a data-log-action="copy-url" class="ad__btn-icon glyphicon glyphicon-link" href="{{ logUrl }}"></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </form>
+        {% else %}
+        <p>No logs with the specified criteria.</p>
+        {% endif %}
+    {% endblock %}
+    </div>
+    <div id="ad-log__container"></div>
+    <div style="display: none" data-page-route="{{ app.request.get('_route') }}"></div>
+{% endblock %}

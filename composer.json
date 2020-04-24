@@ -1,0 +1,23 @@
+{
+    "name": "arturdoruch/event-logger-bundle",
+    "type": "library",
+    "description": "Logging event logs.",
+    "authors": [
+        {
+            "name": "Artur Doruch",
+            "email": "arturdoruch@interia.pl",
+            "homepage": "https://github.com/arturdoruch"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "symfony/framework-bundle": "^3.4",
+        "symfony/form": "^3.4",
+        "arturdoruch/list": "^0.1.8"
+    },
+    "autoload": {
+        "psr-4" : {
+            "ArturDoruch\\EventLoggerBundle\\": ""
+        }
+    }
+}
