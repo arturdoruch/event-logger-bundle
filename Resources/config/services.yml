@@ -1,15 +1,10 @@
 services:
-    arturdoruch_eventlogger.exception_formatter:
-        class: ArturDoruch\Tool\Exception\ExceptionFormatter
-        arguments: ['../../../']
-
     arturdoruch_eventlogger.event_logger:
         class: ArturDoruch\EventLoggerBundle\EventLogger
         autowire: true
 
     arturdoruch_eventlogger.event_processor.exception_processor:
         class: ArturDoruch\EventLoggerBundle\EventProcessor\ExceptionProcessor
-        arguments: ['@arturdoruch_eventlogger.exception_formatter']
 
     arturdoruch_eventlogger.database_log_handler:
         class: ArturDoruch\EventLoggerBundle\Log\Handler\DatabaseLogHandler

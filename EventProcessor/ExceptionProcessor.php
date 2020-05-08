@@ -3,7 +3,7 @@
 namespace ArturDoruch\EventLoggerBundle\EventProcessor;
 
 use ArturDoruch\EventLoggerBundle\Event;
-use ArturDoruch\Tool\Exception\ExceptionFormatter;
+use ArturDoruch\Tool\ExceptionFormatter\ExceptionFormatter;
 use ArturDoruch\Util\Json\UnexpectedJsonException;
 
 /**
@@ -17,9 +17,9 @@ class ExceptionProcessor implements EventProcessorInterface
     protected $exceptionFormatter;
 
 
-    public function __construct(ExceptionFormatter $exceptionFormatter)
+    public function __construct(ExceptionFormatter $exceptionFormatter = null)
     {
-        $this->exceptionFormatter = $exceptionFormatter;
+        $this->exceptionFormatter = $exceptionFormatter ?: new ExceptionFormatter(__DIR__ . '/../../../../');
     }
 
 
