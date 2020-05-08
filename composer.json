@@ -14,8 +14,9 @@
         "php": ">=7.0",
         "symfony/framework-bundle": "^3.4",
         "symfony/form": "^3.4",
+        "arturdoruch/css-styles": "^1.0",
         "arturdoruch/list": "^0.1.8",
-        "arturdoruch/css-styles": "^1.0"
+        "arturdoruch/tool": "^1.1.1"
     },
     "autoload": {
         "psr-4" : {
