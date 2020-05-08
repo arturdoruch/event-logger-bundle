@@ -15,7 +15,7 @@
         "symfony/framework-bundle": "^3.4",
         "symfony/form": "^3.4",
         "arturdoruch/css-styles": "^1.0",
-        "arturdoruch/list": "^0.1.8",
+        "arturdoruch/list-bundle": "^0.1.8",
         "arturdoruch/tool": "^1.1.1"
     },
     "autoload": {
