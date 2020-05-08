@@ -30,9 +30,7 @@
                 </a>
 
                 {% if app.request.xmlHttpRequest %}
-                    <button data-log-action="close" type="button">
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+                    <button data-log-action="close" type="button" class="ad__btn-icon glyphicon glyphicon-remove"></button>
                 {% else %}
                     <a class="btn btn-default btn-sm" style="float: right" href="{{ path('arturdoruch_eventlogger_log_list', {'filter[category]': log.category}) }}" data-log-action="view-list">
                         <span class="glyphicon glyphicon-list"></span> View list

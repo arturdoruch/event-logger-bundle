@@ -16,7 +16,11 @@
     padding: 0 3px;
 }
 
-/* Log container */
+.ad-log__list a.ad__btn-icon[data-log-action="copy-url"] {
+    margin-left: 3px;
+}
+
+/* Log modal container */
 #ad-log__container {
     background: rgba(0, 0, 0, 0.8);
     display: none;
@@ -35,36 +39,9 @@
     background: #fff;
 }
 
-#ad-log__container .ad-log__action-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: #000;
-    width: 100%;
-    height: 44px;
-    padding: 11px 15px;
-    margin: 0;
-}
-
-#ad-log__container *[data-log-action="close"] {
-    background: none;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 20px;
-    border: none;
-    height: 26px;
-    width: 44px;
-    padding: 0;
-    float: right;
-    transition: color .2s;
-}
-
-#ad-log__container *[data-log-action="close"]:hover {
-    color: rgba(255, 255, 255, 1);
-}
-
 /* Log */
 
-/* Action bar */
+/* Log - action bar */
 .ad-log__action-bar {
     background: #f3f3f3;
     padding: 7px;
@@ -98,6 +75,18 @@
     padding: 0;
 }*/
 
+#ad-log__container *[data-log-action="close"] {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    float: right;
+    transition: color .2s;
+}
+
+#ad-log__container *[data-log-action="close"]:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Log - table */
 #ad-log__log table {
     word-break: break-all;
 }

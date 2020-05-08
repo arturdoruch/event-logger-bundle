@@ -80,7 +80,6 @@
                             <button data-log-action="remove" class="ad__btn-icon text-danger glyphicon glyphicon-trash"
                                     formaction="{{ path('arturdoruch_eventlogger_log_remove', {id: log.id, token: csrf_token('remove')}) }}">
                             </button>
-                            &nbsp;
                             <a data-log-action="copy-url" class="ad__btn-icon glyphicon glyphicon-link" href="{{ logUrl }}"></a>
                         </td>
                     </tr>
