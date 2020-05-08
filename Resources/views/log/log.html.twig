@@ -43,7 +43,7 @@
         <div id="ad-log__log-info">
         <table class="table table-condensed">
             <tbody>
-                <tr class="bg-{{ cssClassHelper.colorClass(log.state) }} ad-log__log-state-row">
+                <tr class="ad-log__log-state-row ad-log__bg-state-{{ log.stateString }}">
                     <th>State</th>
                     <td data-log-state>
                         {{ log.stateString|humanize }}

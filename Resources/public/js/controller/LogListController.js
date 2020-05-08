@@ -19,7 +19,7 @@ define([
     var Class = function (filterFormSelector) {
         messenger = new Messenger({ removeAfter: 10 });
 
-        setFilterFormEvents(filterFormSelector);
+        attachFilterFormEvents(filterFormSelector);
     };
 
     /**
@@ -27,15 +27,15 @@ define([
      */
     Class.prototype.initialize = function (logTable) {
         _logTable = logTable;
-        setEvents();
+        attachEvents();
     };
 
-    function setEvents() {
+    function attachEvents() {
         em.on('click', $('button[data-log-action="change-state-many"]'), manageHandler);
         em.on('click', $('button[data-log-action="remove-many"]'), manageHandler);
     }
 
-    function setFilterFormEvents(filterFormSelector) {
+    function attachFilterFormEvents(filterFormSelector) {
         var filterForm = document.querySelector(filterFormSelector),
             dateFields = filterForm.querySelectorAll('input[data-type="date"]'),
             prevFieldName;

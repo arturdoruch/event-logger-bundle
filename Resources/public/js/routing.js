@@ -1,7 +1,8 @@
 
 define(function () {
 
-    var logTableSelector = '.ad-log__list',
+    var logTableSelector = '#ad-log__list',
+        logListContainerSelector = '#ad-log__list-container',
         filterFormSelector = 'form[name="filter"]',
         pageRoute = $('div[data-page-route]').data('pageRoute');
 
@@ -26,7 +27,7 @@ define(function () {
                 logListController.initialize(logTable);
 
                 var filterFormController = new FilterFormController(filterFormSelector);
-                var listController = new ListController('#ad-log__list-container', filterFormController, {
+                var listController = new ListController(logListContainerSelector, filterFormController, {
                     //gettingItemsMessage: 'Getting logs'
                 });
 

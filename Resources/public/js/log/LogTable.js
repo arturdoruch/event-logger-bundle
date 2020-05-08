@@ -10,11 +10,8 @@ define([
         $selectedRow,
         $checkboxes,
         $selectAllCheckbox,
-        logStateClassMap = {
-            0: 'bg-default',
-            1: 'bg-success',
-            2: 'bg-info'
-        };
+        logStateClassPrefix = 'ad-log__bg-state-',
+        logStates = ['new', 'resolved', 'watch'];
 
     /**
      * @param {|jQuery|HTMLTableElement} tableElement
@@ -101,11 +98,11 @@ define([
          * @param {jQuery} $element
          */
         setStateBackground: function (log, $element) {
-            for (var i in logStateClassMap) {
-                $element.removeClass(logStateClassMap[i]);
+            for (var i in logStates) {
+                $element.removeClass(logStateClassPrefix + logStates[i]);
             }
 
-            $element.addClass(logStateClassMap[log.state]);
+            $element.addClass(logStateClassPrefix + log.stateString);
         }
     };
 

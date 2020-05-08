@@ -33,7 +33,7 @@
                 </button>
             </div>
 
-            <table class="table table-hover ad-log__list">
+            <table id="ad-log__list" class="table table-hover">
                 <thead>
                     <tr>
                         <th><input type="checkbox" name="select-all-logs" /></th>
@@ -51,7 +51,7 @@
                 {% for log in logList %}
                     {% set logUrl = path('arturdoruch_eventlogger_log_show', {id: log.id}) %}
                     <tr>
-                        <td class="bg-{{ cssClassHelper.colorClass(log.state) }}">
+                        <td class="ad-log__bg-state-{{ log.stateString }}">
                             <input type="checkbox" name="ids[]" value="{{ log.id }}" />
                         </td>
                         {% for property in listableProperties %}
