@@ -5,6 +5,7 @@ namespace ArturDoruch\EventLoggerBundle\EventProcessor;
 use ArturDoruch\EventLoggerBundle\Event;
 use ArturDoruch\Tool\ExceptionFormatter\ExceptionFormatter;
 use ArturDoruch\Util\Json\UnexpectedJsonException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -36,7 +37,9 @@ class ExceptionProcessor implements EventProcessorInterface
             'file' => $this->exceptionFormatter->shortenFilename($e->getFile()) . ' line ' . $e->getLine(),
         ];
 
-        if (($options['exception_trace'] ?? false) === true) {
+        $addExceptionTrace = $options['exception_trace'] ?? null;
+
+        if ($addExceptionTrace === true || $addExceptionTrace === null && $e instanceof FatalErrorException) {
             $exceptionContext['trace'] = $this->exceptionFormatter->getTraceAsHtml($e);
         }
 
