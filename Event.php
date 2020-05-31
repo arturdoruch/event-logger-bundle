@@ -38,7 +38,7 @@ class Event implements EventInterface
      * @param string $category
      * @param array $context
      */
-    public function __construct($message, string $action, ?string $category = null, array $context = [])
+    public function __construct($message, string $action, string $category = '', array $context = [])
     {
         if ($message instanceof \Throwable) {
             $this->throwable = $message;
