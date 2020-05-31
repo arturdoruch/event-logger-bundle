@@ -11,7 +11,7 @@
             {% set listTag = 'ol' %}
             {% set isList = true %}
         {% endif %}
-        <{{ listTag }} class="ad-log__ul-list{% if isList %} ad-log__ul-list-styled{% endif %}">
+        <{{ listTag }} class="ad-log__ul-list{% if isList %}-styled{% endif %}">
             {% for name, value in context %}
             <li>
                 {% set value = arturdoruch_eventlogger_convert_object(value) %}

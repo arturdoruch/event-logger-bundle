@@ -99,6 +99,7 @@
 #ad-log__log table tr th {
     width: 145px;
     min-width: 145px;
+    word-break: break-word;
 }
 
 #ad-log__log-info table tr:first-child td,
@@ -128,11 +129,8 @@ ul.ad-log__ul-list {
     list-style: none;
 }
 
-ul.ad-log__ul-list-styled {
-    list-style: disc;
-}
-
 ul.ad-log__ul-list,
+ul.ad-log__ul-list-styled,
 ol.ad-log__ul-list
 {
     margin-bottom: 1em;
