@@ -87,11 +87,13 @@ class LogManager
      *
      * @param LogInterface $log
      *
-     * @return int
+     * @return string The log id.
      */
     public function insert(LogInterface $log)
     {
-        return $this->connection->insert($this->tableName, $this->prepareInsertData($log), $this->fieldTypes);
+        $this->connection->insert($this->tableName, $this->prepareInsertData($log), $this->fieldTypes);
+
+        return $this->connection->lastInsertId();
     }
 
 

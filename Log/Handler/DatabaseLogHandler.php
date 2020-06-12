@@ -20,9 +20,13 @@ class DatabaseLogHandler implements LogHandlerInterface
         $this->logManager = $logManager;
     }
 
-
+    /**
+     * @param LogInterface $log
+     *
+     * @return string The log id.
+     */
     public function handle(LogInterface $log)
     {
-        $this->logManager->insert($log);
+        return $this->logManager->insert($log);
     }
 }
