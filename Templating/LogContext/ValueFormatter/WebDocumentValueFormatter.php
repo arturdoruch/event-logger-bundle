@@ -48,7 +48,9 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
 
     public function format(string $name, $value)
     {
-        $value = preg_replace('/^' . self::VALUE_PREFIX . '/', '', $value);
+        if (!$value = preg_replace('/^' . self::VALUE_PREFIX . '/', '', $value)) {
+            return '';
+        }
 
         if ($array = $this->decodeIfJson($value)) {
             $value = json_encode($array, JSON_PRETTY_PRINT);
