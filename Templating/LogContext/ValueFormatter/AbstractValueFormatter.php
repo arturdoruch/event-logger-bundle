@@ -20,6 +20,11 @@ abstract class AbstractValueFormatter implements ValueFormatterInterface
     protected $template;
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * @inheritdoc
      */
     public function setTwig(Environment $twig)
@@ -33,5 +38,13 @@ abstract class AbstractValueFormatter implements ValueFormatterInterface
     public function setTemplate(string $template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 }

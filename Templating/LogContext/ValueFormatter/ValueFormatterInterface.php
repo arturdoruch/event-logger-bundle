@@ -22,6 +22,13 @@ interface ValueFormatterInterface
     public function setTemplate(string $template);
 
     /**
+     * Sets options specified for value formatter.
+     *
+     * @param array $options
+     */
+    public function setOptions(array $options);
+
+    /**
      * Checks if formatter supports specific log context value.
      *
      * @param string $name The context name.
