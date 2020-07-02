@@ -10,8 +10,9 @@ define([
     'arturdoruchJs/util/stringUtils',
     'arturdoruchJs/helper/scrollBar',
     'arturdoruchJs/tool/userInterface',
-    'arturdoruchJs/util/browserUtils'
-], function (em, Messenger, httpClient, screenUtils, stringUtils, scrollBar, userInterface, browserUtils) {
+    'arturdoruchJs/util/browserUtils',
+    '../log/showLogEventDispatcher'
+], function (em, Messenger, httpClient, screenUtils, stringUtils, scrollBar, userInterface, browserUtils, showLogEventDispatcher) {
 
     var $container,
         logArticleSelector,
@@ -48,18 +49,22 @@ define([
 
 
     function setLogEvents() {
-        var $log = $(logArticleSelector);
-
-        em.on('click', $log.find('*[data-log-action="remove"]'), remove);
-        em.on('click', $log.find('*[data-log-action="change-state"]'), changeState);
-        em.on('click', $log.find('*[data-log-action="copy-url"]'), copyUrlToClipboard);
-
         em.on('click', $container.find('*[data-log-action="close"]'), hide);
         em.on('click', $container, function (e) {
             if ($container.is(e.target)) {
                 hide();
             }
         });
+
+        var $log = $(logArticleSelector);
+
+        if ($log.length === 0) {
+            return;
+        }
+
+        em.on('click', $log.find('*[data-log-action="remove"]'), remove);
+        em.on('click', $log.find('*[data-log-action="change-state"]'), changeState);
+        em.on('click', $log.find('*[data-log-action="copy-url"]'), copyUrlToClipboard);
 
         browserUtils.attachOpenContentEvent();
         userInterface.attachSlideContentEvent();
@@ -68,6 +73,8 @@ define([
             var anchor = e.target;
             window.open(anchor.href, anchor.target).focus();
         });
+
+        showLogEventDispatcher.dispatch($log);
     }
 
     /**
