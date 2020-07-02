@@ -7,7 +7,7 @@
         </button>
     {% endif %}
     <div id="ad-log__{{ id }}" class="ad-log__slide-content-container"{% if not collapse %} style="display: block;"{% endif %}>
-        <pre id="{{ id }}" style="white-space: pre-wrap" data-content-type="{{ contentType }}" {% if highlight %} data-highlight{% endif %}
-        >{% if highlight %}{{ document|raw }}{% else %}{{ document }}{% endif %}</pre>
+        <pre id="{{ id }}" style="white-space: pre-wrap"><code class="language-{{ contentType }}"
+            >{% if highlight %}{{ document|raw }}{% else %}{{ document }}{% endif %}</code></pre>
     </div>
 </div>
