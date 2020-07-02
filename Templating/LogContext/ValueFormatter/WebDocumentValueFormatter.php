@@ -2,7 +2,9 @@
 
 namespace ArturDoruch\EventLoggerBundle\Templating\LogContext\ValueFormatter;
 
+use ArturDoruch\Json\JsonUtils;
 use ArturDoruch\Util\StringUtils;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -18,6 +20,24 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
      * @var string Twig template rendering the web document.
      */
     protected $template = '@ArturDoruchEventLogger/log/context/web_document.html.twig';
+
+
+    public function setOptions(array $options)
+    {
+        $optionsResolver = new OptionsResolver();
+        $optionsResolver
+            ->setDefaults([
+                'highlight_json_syntax' => true,
+                'highlight_json_syntax_class_prefix' => 'json',
+                // The minimum characters, when displayed content should be collapsed on loading page.
+                'collapse_length' => 200
+            ])
+            ->setAllowedTypes('highlight_json_syntax', 'boolean')
+            ->setAllowedTypes('highlight_json_syntax_class_prefix', 'string')
+            ->setAllowedTypes('collapse_length', 'integer');
+
+        $this->options = $optionsResolver->resolve($options);
+    }
 
 
     public function supports(string $name, $value): bool
@@ -45,20 +65,31 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
         return false;
     }
 
-
+    /**
+     * @todo Highlight HTML code.
+     *
+     * @inheritdoc
+     */
     public function format(string $name, $value)
     {
         if (!$value = preg_replace('/^' . self::VALUE_PREFIX . '/', '', $value)) {
             return '';
         }
 
-        if ($array = $this->decodeIfJson($value)) {
-            $value = json_encode($array, JSON_PRETTY_PRINT);
+        if ($jsonData = $this->decodeIfJson($value)) {
+            $value = json_encode($jsonData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+            if ($this->options['highlight_json_syntax']) {
+                $value = JsonUtils::highlightSyntax($value, $this->options['highlight_json_syntax_class_prefix']);
+            }
         }
 
         return $this->twig->render($this->template, [
             'index' => mt_rand(),
             'document' => $value,
+            'contentType' => $jsonData ? 'json' : 'html',
+            'highlight' => $this->options['highlight_json_syntax'],
+            'collapse' => strlen($value) > $this->options['collapse_length']
         ]);
     }
 

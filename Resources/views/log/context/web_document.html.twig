@@ -1,14 +1,13 @@
-{% set isLongDocument = document|length > 50 %}
-
 <div class="ad-log__context-document-container">
     {% set id = 'web-document-' ~ index %}
-    {% if isLongDocument %}
+    {% if collapse %}
         <button class="btn btn-xs btn-default" data-slide-content="ad-log__{{ id }}">&nbsp;&nbsp;...&nbsp;&nbsp;</button>
         <button class="btn btn-xs btn-info" data-open-in-browser="{{ id }}">
             <span class="glyphicon glyphicon-globe"></span> Open in browser
         </button>
     {% endif %}
-    <div id="ad-log__{{ id }}" class="ad-log__slide-content-container"{% if not isLongDocument %} style="display: block;"{% endif %}>
-        <pre id="{{ id }}" style="white-space: pre-wrap">{{ document }}</pre>
+    <div id="ad-log__{{ id }}" class="ad-log__slide-content-container"{% if not collapse %} style="display: block;"{% endif %}>
+        <pre id="{{ id }}" style="white-space: pre-wrap" data-content-type="{{ contentType }}" {% if highlight %} data-highlight{% endif %}
+        >{% if highlight %}{{ document|raw }}{% else %}{{ document }}{% endif %}</pre>
     </div>
 </div>
