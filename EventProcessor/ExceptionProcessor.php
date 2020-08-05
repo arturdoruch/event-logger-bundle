@@ -30,24 +30,38 @@ class ExceptionProcessor implements EventProcessorInterface
             return;
         }
 
+        $exceptionContext = $this->createContext($e, $options['exception_trace'] ?? null);
         $context = $event->getContext();
 
-        $exceptionContext = [
+        if (isset($context['exception'])) {
+            $context['exception'] = array_merge($context['exception'], $exceptionContext);
+        } else {
+            $context = array_merge(['exception' => $exceptionContext], $context);
+        }
+
+        $event->setContext($context);
+    }
+
+
+    private function createContext(\Throwable $e, ?bool $addExceptionTrace): array
+    {
+        $context = [
             'class' => get_class($e),
             'file' => $this->exceptionFormatter->shortenFilename($e->getFile()) . ' line ' . $e->getLine(),
         ];
 
-        $addExceptionTrace = $options['exception_trace'] ?? null;
-
         if ($addExceptionTrace === true || $addExceptionTrace === null && $e instanceof FatalErrorException) {
-            $exceptionContext['trace'] = $this->exceptionFormatter->getTraceAsHtml($e);
+            $context['trace'] = $this->exceptionFormatter->getTraceAsHtml($e);
         }
 
         if (class_exists('\ArturDoruch\Util\Json\UnexpectedJsonException') && $e instanceof UnexpectedJsonException) {
-            $exceptionContext['json'] = strlen($json = $e->getJson()) > 5000 ? substr($e->getJson(), 0, 5000) . '...' : $json;
+            $context['json'] = strlen($json = $e->getJson()) > 5000 ? substr($e->getJson(), 0, 5000) . '...' : $json;
         }
 
-        $context = array_merge(['exception' => $exceptionContext], $context);
-        $event->setContext($context);
+        if ($e->getPrevious()) {
+            $context['previous'] = $this->createContext($e->getPrevious(), $addExceptionTrace);
+        }
+
+        return $context;
     }
 }
