@@ -30,11 +30,13 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
                 'highlight_json_syntax' => true,
                 'highlight_json_syntax_class_prefix' => 'json',
                 // The minimum characters, when displayed content should be collapsed on loading page.
-                'collapse_length' => 200
+                'collapse_length' => 200,
+                'xml_regexp' => '/<\?xml[^>]+\?>|<([a-z]+)[^>]*>.*<\/(\1)>|<(link|meta|img|input|embed) [^>]*\/?>/si',
             ])
             ->setAllowedTypes('highlight_json_syntax', 'boolean')
             ->setAllowedTypes('highlight_json_syntax_class_prefix', 'string')
-            ->setAllowedTypes('collapse_length', 'integer');
+            ->setAllowedTypes('collapse_length', 'integer')
+            ->setAllowedTypes('xml_regexp', 'string');
 
         $this->options = $optionsResolver->resolve($options);
     }
@@ -42,7 +44,11 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
 
     public function supports(string $name, $value): bool
     {
-        if (!$value || !is_string($value)) {
+        if (!is_string($value)) {
+            return false;
+        }
+
+        if (!$value = trim($value)) {
             return false;
         }
 
@@ -54,13 +60,9 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
             return true;
         }
 
-        if (preg_match('/\<html.+\<\/html\>$/i', trim($value))) {
+        if (preg_match($this->options['xml_regexp'], $value)) {
             return true;
         }
-
-        /*if (preg_match('/\<([a-z]{2,})[^\>]*\>.+\<\/\1\>$/i', $value)) {
-            return true;
-        }*/
 
         return false;
     }
@@ -87,7 +89,7 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
         return $this->twig->render($this->template, [
             'index' => mt_rand(),
             'document' => $value,
-            'contentType' => $jsonData ? 'json' : 'html',
+            'contentType' => $jsonData ? 'json' : 'xml',
             'highlight' => $this->options['highlight_json_syntax'],
             'collapse' => strlen($value) > $this->options['collapse_length']
         ]);
