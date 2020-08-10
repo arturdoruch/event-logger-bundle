@@ -31,7 +31,7 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
                 'highlight_json_syntax_class_prefix' => 'json',
                 // The minimum characters, when displayed content should be collapsed on loading page.
                 'collapse_length' => 200,
-                'xml_regexp' => '/<\?xml[^>]+\?>|<([a-z]+)[^>]*>.*<\/(\1)>|<(link|meta|img|input|embed) [^>]*\/?>/si',
+                'xml_regexp' => '/<\?xml[^>]+\?>|<(?!(a|b|strong|em))([a-z]+)[^>]*>.*<\/(\1)>|<(link|meta|img|input|embed) [^>]*\/?>/si',
             ])
             ->setAllowedTypes('highlight_json_syntax', 'boolean')
             ->setAllowedTypes('highlight_json_syntax_class_prefix', 'string')
