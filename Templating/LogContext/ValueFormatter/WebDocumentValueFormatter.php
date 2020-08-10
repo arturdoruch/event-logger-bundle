@@ -12,9 +12,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class WebDocumentValueFormatter extends AbstractValueFormatter
 {
     /**
-     * Add this constant to the beginning of the web content string, to marks string as web content.
+     * The constant marks JSON, XML or HTML code as web document.
+     * Add this constant to the beginning of the web document code.
      */
-    const VALUE_PREFIX = 'web_document:';
+    const DOCUMENT_PREFIX = 'web_document:';
 
     /**
      * @var string Twig template rendering the web document.
@@ -29,9 +30,10 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
             ->setDefaults([
                 'highlight_json_syntax' => true,
                 'highlight_json_syntax_class_prefix' => 'json',
-                // The minimum characters, when displayed content should be collapsed on loading page.
+                // The minimum characters, when document content should be initially collapsed.
                 'collapse_length' => 200,
-                'xml_regexp' => '/<\?xml[^>]+\?>|<(?!(a|b|strong|em))([a-z]+)[^>]*>.*<\/(\1)>|<(link|meta|img|input|embed) [^>]*\/?>/si',
+                // The regexp detecting XML or HTML code.
+                'xml_regexp' => '/<\?xml[^>]+\?>|<(html|iframe|script|style)[^>]*>.*<\/(\1)>|<(link|meta|img|input|embed) [^>]*\/?>/si',
             ])
             ->setAllowedTypes('highlight_json_syntax', 'boolean')
             ->setAllowedTypes('highlight_json_syntax_class_prefix', 'string')
@@ -52,7 +54,7 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
             return false;
         }
 
-        if (StringUtils::startsWith(self::VALUE_PREFIX, $value)) {
+        if (StringUtils::startsWith(self::DOCUMENT_PREFIX, $value)) {
             return true;
         }
 
@@ -67,14 +69,10 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
         return false;
     }
 
-    /**
-     * @todo Highlight HTML code.
-     *
-     * @inheritdoc
-     */
+
     public function format(string $name, $value)
     {
-        if (!$value = preg_replace('/^' . self::VALUE_PREFIX . '/', '', $value)) {
+        if (!$value = preg_replace('/^' . self::DOCUMENT_PREFIX . '/', '', $value)) {
             return '';
         }
 
