@@ -1,7 +1,7 @@
 {
     "name": "arturdoruch/event-logger-bundle",
     "type": "symfony-bundle",
-    "description": "Logging event logs.",
+    "description": "Logging, viewing and managing custom event logs.",
     "license": "MIT",
     "authors": [
         {
