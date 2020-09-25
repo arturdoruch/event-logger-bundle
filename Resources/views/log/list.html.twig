@@ -6,11 +6,6 @@
 {% set windowTitle = 'Event logs' %}
 {% set pageTitle = 'Event logs' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('bundles/arturdoruchjsvendor/js/jquery/ui/jquery-ui.min.css') }}" />
-{% endblock %}
-
 {% block content %}
     {{ arturdoruch_list_filter_form(logList.filterForm) }}
 
