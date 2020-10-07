@@ -2,9 +2,9 @@
  * (c) Artur Doruch <arturdoruch@interia.pl>
  */
 
-import '@arturdoruch/log/styles/log.css';
-import LogController from '@arturdoruch/log/lib/controller/LogController';
-import LogListController from '@arturdoruch/log/lib/controller/LogListController';
+import './../styles/log.css';
+import LogController from './controller/LogController';
+import LogListController from './controller/LogListController';
 
 import '@arturdoruch/list/styles/list.css';
 import ListController from '@arturdoruch/list/lib/ListController';
