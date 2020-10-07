@@ -1,7 +1,7 @@
 {
     "name": "arturdoruch/event-logger-bundle",
     "type": "symfony-bundle",
-    "description": "Logging, viewing and managing custom event logs.",
+    "description": "Logging, viewing and managing logs of any event.",
     "license": "MIT",
     "authors": [
         {
@@ -12,10 +12,10 @@
     ],
     "require": {
         "php": ">=7.0",
-        "symfony/framework-bundle": "^3.4",
-        "symfony/form": "^3.4",
+        "symfony/framework-bundle": "^3.0",
+        "symfony/form": "^3.0",
         "arturdoruch/css-styles": "^1.0",
-        "arturdoruch/list-bundle": "^0.1.8",
+        "arturdoruch/list-bundle": "^0.2.1",
         "arturdoruch/tool": "^1.1.1",
         "arturdoruch/json": "^1.0"
     },
