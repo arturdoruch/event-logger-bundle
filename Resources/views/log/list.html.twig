@@ -57,7 +57,7 @@
                                         {{ value|date(property.format) }}
                                     {% else %}
                                         {% if property.name == 'message' %}
-                                            <a data-show-log href="{{ logUrl }}">{{ value|truncate(180) }}</a>
+                                            <a data-show-log href="{{ logUrl }}">{{ value }}</a>
                                         {% else %}
                                             {{ value }}
                                         {% endif %}
