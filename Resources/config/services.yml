@@ -36,12 +36,14 @@ services:
         class: ArturDoruch\EventLoggerBundle\Twig\Extension\MiscExtension
         arguments: ['%arturdoruch_eventlogger.templating.base_template%']
         public: false
-        tags:
-            - { name: twig.extension }
+        tags: ['twig.extension']
 
     arturdoruch_eventlogger.twig.log_context_extension:
         class: ArturDoruch\EventLoggerBundle\Twig\Extension\LogContextExtension
         autowire: true
         public: false
-        tags:
-            - { name: twig.extension }
+        tags: ['twig.extension']
+
+    twig.extension.string:
+        class: Twig\Extra\String\StringExtension
+        tags: ['twig.extension']

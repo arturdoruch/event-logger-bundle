@@ -50,7 +50,7 @@ class Log implements LogInterface
 
         $action = new StringProperty('action', 'Action');
 
-        $state = new StringProperty('state', 'State', 'integer');
+        $state = new StringProperty('state', 'State');
         $state
             ->filterable()
             ->setFilterFormChoices(array_flip(LogStates::all()));
@@ -61,7 +61,8 @@ class Log implements LogInterface
         $message
             ->filterable()
             ->listable()
-            ->sortable();
+            ->sortable()
+            ->setTruncateOptions(180);
 
         $builder
             ->addProperty($id)

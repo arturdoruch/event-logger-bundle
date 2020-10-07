@@ -51,18 +51,22 @@
                         </td>
                         {% for property in listableProperties %}
                             <td class="ad-log__log-{{ property.name }}{% if property.isType('integer') %} text-right{% endif %}">
-                                {% set value = log.get(property.name) %}
-                                {% if value %}
-                                    {% if property.type == 'datetime' %}
-                                        {{ value|date(property.format) }}
+                            {% set value = log.get(property.name) %}
+                            {% if value %}
+                                {% if property.type == 'datetime' %}
+                                    {{ value|date(property.format) }}
+                                {% else %}
+                                    {% if property.type == 'string' and property.truncateRequired %}
+                                        {% set truncateOpts = property.truncateOptions %}
+                                        {% set value = value|u.truncate(truncateOpts.length, truncateOpts.ellipsis, truncateOpts.cut) %}
+                                    {% endif %}
+                                    {% if property.name == 'message' %}
+                                        <a data-show-log href="{{ logUrl }}">{{ value }}</a>
                                     {% else %}
-                                        {% if property.name == 'message' %}
-                                            <a data-show-log href="{{ logUrl }}">{{ value }}</a>
-                                        {% else %}
-                                            {{ value }}
-                                        {% endif %}
+                                        {{ value }}
                                     {% endif %}
                                 {% endif %}
+                            {% endif %}
                             </td>
                         {% endfor %}
                         <td>
