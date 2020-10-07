@@ -4,7 +4,6 @@ namespace ArturDoruch\EventLoggerBundle\Log;
 
 use ArturDoruch\EventLoggerBundle\Log\Property\DateTimeProperty;
 use ArturDoruch\EventLoggerBundle\Log\Property\PropertyInterface;
-use ArturDoruch\EventLoggerBundle\Log\Property\StringProperty;
 use ArturDoruch\EventLoggerBundle\LogInterface;
 
 /**
@@ -45,7 +44,7 @@ class LogPropertyCollection implements \IteratorAggregate
     }
 
     /**
-     * @return StringProperty[]
+     * @return PropertyInterface[]
      */
     public function getListable(): array
     {
@@ -55,7 +54,7 @@ class LogPropertyCollection implements \IteratorAggregate
     }
 
     /**
-     * @return StringProperty[]
+     * @return PropertyInterface[]
      */
     public function getFilterable(): array
     {
@@ -65,7 +64,7 @@ class LogPropertyCollection implements \IteratorAggregate
     }
 
     /**
-     * @return StringProperty[]
+     * @return PropertyInterface[]
      */
     public function getExtra(): array
     {
@@ -75,7 +74,7 @@ class LogPropertyCollection implements \IteratorAggregate
     }
 
     /**
-     * @return StringProperty[]
+     * @return PropertyInterface[]
      */
     public function all(): array
     {
