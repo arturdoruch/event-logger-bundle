@@ -71,8 +71,13 @@ class LogPropertyCollectionBuilder
         return $this;
     }
 
-
-    public function getProperty(string $name)
+    /**
+     * @param string $name
+     *
+     * @return PropertyInterface
+     * @throws \InvalidArgumentException when log property with specified name does not exist.
+     */
+    public function getProperty(string $name): PropertyInterface
     {
         foreach ($this->properties as $property) {
             if ($property->getName() === $name) {
