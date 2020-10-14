@@ -1,12 +1,12 @@
 {
   "name": "@arturdoruch/event-logger-bundle",
   "description": "Frontend part of the Symfony EventLoggerBundle.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "dependencies": {
     "@arturdoruch/browser": "^1.0.1",
     "@arturdoruch/flash-messenger": "^1.0.3",
-    "@arturdoruch/list": "https://github.com/arturdoruch/js-list#^0.1",
+    "@arturdoruch/list": "https://github.com/arturdoruch/js-list#^0.2",
     "@arturdoruch/ui": "^1.0.1"
   },
   "author": {

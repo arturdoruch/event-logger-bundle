@@ -24,8 +24,15 @@ let elementSelectors = {
     logModalContainer: '#ad-log__container',
 };
 
-class LogController {
+export default class LogController {
 
+    /**
+     * @param {FlashMessenger} [flashMessenger]
+     * @param {string} [logSelector]
+     * @param {string} [logModalContainerSelector]
+     *
+     * @return {LogController}
+     */
     static getInstance(flashMessenger, logSelector, logModalContainerSelector) {
         if (!instance) {
             instance = new LogController(flashMessenger, logSelector, logModalContainerSelector);
@@ -34,11 +41,6 @@ class LogController {
         return instance;
     }
 
-    /**
-     * @param {FlashMessenger} [flashMessenger]
-     * @param {string} [logSelector]
-     * @param {string} [logModalContainerSelector]
-     */
     constructor(flashMessenger, logSelector, logModalContainerSelector) {
         if (instance) {
             throw new Error('Constructor of the class "LogController" can not be called directly. Call "LogController.getInstance()" instead.');
@@ -87,7 +89,7 @@ class LogController {
     static dispatchLoadEvent() {
         const $log = $(elementSelectors.log);
 
-        if ($log.length > 0) {
+        if ($log.length) {
             loadEventDispatcher.dispatch($log);
         }
     }
@@ -107,12 +109,6 @@ class LogController {
         isDetailPage = false;
         registerTableEvents();
     }
-}
-
-export default {
-    getInstance: LogController.getInstance,
-    addLoadListener: LogController.addLoadListener,
-    dispatchLoadEvent: LogController.dispatchLoadEvent,
 }
 
 

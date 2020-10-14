@@ -8,23 +8,27 @@ import LogListController from './controller/LogListController';
 
 import '@arturdoruch/list/styles/list.css';
 import ListController from '@arturdoruch/list/lib/ListController';
-import FilterFormController from '@arturdoruch/list/lib/FilterFormController';
-
-// Set log controller.
-const logController = LogController.getInstance();
+import FilterForm from '@arturdoruch/list/lib/FilterForm';
 
 const listTableSelector = '#ad-log__list';
 const listContainerSelector = '#ad-log__list-container';
+// Set log controller.
+const logController = LogController.getInstance();
+let filterForm;
 
 if (document.querySelector(listContainerSelector)) {
     // Set log list controller.
     const logListController = LogListController.getInstance(logController, listTableSelector);
-
     // Setup list controller.
-    const filterFormController = new FilterFormController('form[name="filter"]');
-    const listController = new ListController(listContainerSelector, filterFormController);
+    filterForm = new FilterForm('form[name="filter"]');
+    const listController = new ListController(listContainerSelector, filterForm);
 
     listController.addUpdateListener(function () {
         logListController.updateList();
     });
+}
+
+export default {
+    filterForm,
+    LogController
 }

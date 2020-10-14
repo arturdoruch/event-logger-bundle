@@ -38,7 +38,6 @@ LogController.addLoadListener(function ($log) {
 });
 ```
 
-
 ### Dispatching the log "load" event
 
 On the log details page manually dispatch the "load" event by calling the `LogController.dispatchLoadEvent()` method.

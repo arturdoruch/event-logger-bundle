@@ -10,14 +10,18 @@ import LogTable from './../log/LogTable';
 
 let instance;
 /**
- * @var {LogTable}
+ * @type {LogTable}
  */
 let logTable;
 let freeze = false;
 let messenger;
+
+/**
+ * @type {LogController}
+ */
 let _logController;
 
-class LogListController {
+export default class LogListController {
     /**
      * @param {LogController} logController
      * @param {string} [logTableSelector = '#ad-log__list']
@@ -32,10 +36,6 @@ class LogListController {
         return instance;
     }
 
-    /**
-     * @param {string} [logTableSelector = "#ad-log__list"]
-     * @param {LogController} logController
-     */
     constructor(logController, logTableSelector) {
         if (instance) {
             throw new Error('Constructor of the class "LogListController" can not be called directly. Call "LogListController.getInstance()" instead.');
@@ -53,10 +53,6 @@ class LogListController {
         registerLogsEvents();
         _logController.setLogTable(logTable);
     }
-}
-
-export default {
-    getInstance: LogListController.getInstance
 }
 
 
