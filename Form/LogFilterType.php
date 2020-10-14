@@ -52,9 +52,7 @@ class LogFilterType extends AbstractType
                     'required' => false
                 ]);
             } elseif ($property instanceof DateTimeProperty) {
-                $dateFormat = $property->getFilterFormFormat();
-                $this->addDateChild($builder, $name . 'From', $dateFormat);
-                $this->addDateChild($builder, $name . 'To', $dateFormat);
+                $this->addDateRangeChildren($builder, $name, $property->getFilterFormFormat());
             } else {
                 $builder->add($name, Type\TextType::class, [
                     'required' => false
@@ -64,22 +62,26 @@ class LogFilterType extends AbstractType
     }
 
 
-    private function addDateChild(FormBuilderInterface $builder, $name, $format)
+    private function addDateRangeChildren(FormBuilderInterface $builder, $name, $format)
     {
-        $builder->add($name, Type\DateType::class, [
-            'required' => false,
-            'widget' => 'single_text',
-            'format' => $format,
-            'attr' => [
-                'data-type' => 'date',
-                'data-format' => $format,
-                'placeholder' => $format
-            ],
-            /*'constraints' => [
-                new \Symfony\Component\Validator\Constraints\Date([
-                    'format' => $format
-                ])
-            ]*/
-        ]);
+        static $positions = ['From', 'To'];
+
+        foreach ($positions as $position) {
+            $builder->add($name . $position, Type\DateType::class, [
+                'required' => false,
+                'widget' => 'single_text',
+                'format' => $format,
+                'attr' => [
+                    'data-type' => 'date',
+                    'data-format' => $format,
+                    'placeholder' => $format
+                ],
+                /*'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\Date([
+                        'format' => $format
+                    ])
+                ]*/
+            ]);
+        }
     }
 }
