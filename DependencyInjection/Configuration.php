@@ -46,6 +46,7 @@ class Configuration implements ConfigurationInterface
         $node = $builder->root('log');
 
         $node
+            ->isRequired()
             ->beforeNormalization()
             ->always(function ($v) {
                 if (empty($v['entity_class']) &&
@@ -99,6 +100,7 @@ class Configuration implements ConfigurationInterface
         $node = $builder->root('log_viewing');
 
         $node
+            ->isRequired()
             ->children()
                 ->scalarNode('base_template')
                     ->isRequired()->cannotBeEmpty()
