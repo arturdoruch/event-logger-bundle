@@ -29,9 +29,7 @@ class LogContextValueFormattersPass implements CompilerPassInterface
                 $definition->addMethodCall('setTemplate', [$config['template']]);
             }
 
-            if (!empty($config['options'])) {
-                $definition->addMethodCall('setOptions', [$config['options']]);
-            }
+            $definition->addMethodCall('setOptions', [$config['options']]);
 
             $formatterManagerDefinition->addMethodCall('add', [$definition]);
         }

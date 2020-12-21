@@ -35,8 +35,8 @@ class ArturDoruchEventLoggerExtension extends Extension
         $container->setParameter('arturdoruch_eventlogger.log.driver_service', $logViewingConfig['driver_service']);
 
         $container->setParameter('arturdoruch_eventlogger.templating.base_template', $logViewingConfig['base_template']);
-        $container->setParameter('arturdoruch_eventlogger.templating.log_context.object_converters', $logViewingConfig['context']['object_converters']);
-        $container->setParameter('arturdoruch_eventlogger.templating.log_context.value_formatters', $logViewingConfig['context']['value_formatters']);
+        $container->setParameter('arturdoruch_eventlogger.templating.log_context.object_converters', $logViewingConfig['context']['object_converters'] ?? []);
+        $container->setParameter('arturdoruch_eventlogger.templating.log_context.value_formatters', $logViewingConfig['context']['value_formatters'] ?? []);
 
         $container->setParameter('arturdoruch_eventlogger.log.filter_form.choice_placeholder', $logViewingConfig['filter_form']['choice_placeholder']);
         $container->setParameter('arturdoruch_eventlogger.log.list_item_limits', $logViewingConfig['list_item_limits']);
