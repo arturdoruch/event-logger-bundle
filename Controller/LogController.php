@@ -83,15 +83,15 @@ class LogController extends Controller
         }
 
         $purge = array_keys($request->request->get('purge', []));
-        $channel = array_shift($purge);
+        $category = array_shift($purge);
 
-        if (!in_array($channel, $this->logCategories)) {
-            $this->addFlash('error', sprintf('Not recognized log channel <b>%s</b>.', $channel));
+        if (!in_array($category, $this->logCategories)) {
+            $this->addFlash('error', sprintf('Not recognized the <b>%s</b> category.', $category));
         } else {
             try {
-                $removed = $this->logDriver->purge($channel);
+                $removed = $this->logDriver->purge($category);
 
-                $this->addFlash('success', sprintf('Purged %d logs from <b>%s</b> channel.', $removed, $channel));
+                $this->addFlash('success', sprintf('Purged %d logs from the <b>%s</b> category.', $removed, $category));
             } catch (\Exception $e) {
                 $this->addFlash('error', $e->getMessage());
             }
