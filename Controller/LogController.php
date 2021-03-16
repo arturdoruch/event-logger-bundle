@@ -3,6 +3,7 @@
 namespace ArturDoruch\EventLoggerBundle\Controller;
 
 use ArturDoruch\EventLoggerBundle\Form\LogFilterType;
+use ArturDoruch\EventLoggerBundle\Log\Driver\Exception\LogNotFoundException;
 use ArturDoruch\EventLoggerBundle\Log\Driver\LogDriverInterface;
 use ArturDoruch\EventLoggerBundle\Log\LogPropertyCollection;
 use ArturDoruch\EventLoggerBundle\LogStates;
@@ -183,7 +184,7 @@ class LogController extends Controller
     {
         try {
             $log = $this->logDriver->get($id);
-        } catch (\Exception $e) {
+        } catch (LogNotFoundException $e) {
             if ($request->isXmlHttpRequest()) {
                 return new Response($e->getMessage(), 404);
             }
