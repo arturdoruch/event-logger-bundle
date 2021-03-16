@@ -100,7 +100,7 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
      */
     private function decodeIfJson($value): ?array
     {
-        if (($array = json_decode($value, true)) !== null && $array != $value) {
+        if (is_array($array = json_decode($value, true)) && $array != $value) {
             return $array;
         }
 
