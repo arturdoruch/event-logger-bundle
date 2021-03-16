@@ -178,7 +178,6 @@ class LogController extends Controller
      *      "/{id}",
      *      methods={"GET"}
      * )
-     * @Template("@ArturDoruchEventLogger/log/log.html.twig")
      */
     public function showAction($id, Request $request)
     {
@@ -192,12 +191,24 @@ class LogController extends Controller
             throw $this->createNotFoundException($e->getMessage());
         }
 
-        return [
+        $templateParameters = [
             'log' => $log,
             'logStates' => LogStates::all(),
             'cssClassHelper' => new CssClassHelper(),
             'logPropertyCollection' => $this->get('arturdoruch_eventlogger.log_property_collection')
         ];
+
+        try {
+            return new Response($this->renderView("@ArturDoruchEventLogger/log/log.html.twig", $templateParameters));
+        } catch (\Throwable $e) {
+            if ($request->isXmlHttpRequest()) {
+                $content = $this->getParameter('kernel.environment') === 'prod' ? 'Log template rendering error.' : $e->getMessage();
+
+                return new Response($content, 500);
+            }
+
+            throw $e;
+        }
     }
 
     /**
