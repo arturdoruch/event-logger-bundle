@@ -202,9 +202,7 @@ class LogController extends Controller
             return new Response($this->renderView("@ArturDoruchEventLogger/log/log.html.twig", $templateParameters));
         } catch (\Throwable $e) {
             if ($request->isXmlHttpRequest()) {
-                $content = $this->getParameter('kernel.environment') === 'prod' ? 'Log template rendering error.' : $e->getMessage();
-
-                return new Response($content, 500);
+                return new Response($this->createErrorMessage($e, 'Log template rendering'), 500);
             }
 
             throw $e;
@@ -224,8 +222,8 @@ class LogController extends Controller
                 $this->removeLog($id, $token);
 
                 return new Response(sprintf('Log with id <b>%s</b> has been removed.', $id));
-            } catch (\Exception $e) {
-                return new Response($e->getMessage(), 400);
+            } catch (\Throwable $e) {
+                return new Response($this->createErrorMessage($e, 'Log removing'), 400);
             }
         }
 
@@ -263,8 +261,8 @@ class LogController extends Controller
                 $this->logDriver->remove($data['ids']);
 
                 return new Response();
-            } catch (\Exception $e) {
-                return new Response($e->getMessage(), 400);
+            } catch (\Throwable $e) {
+                return new Response($this->createErrorMessage($e, 'Logs removing'), 400);
             }
         }
 
@@ -275,7 +273,6 @@ class LogController extends Controller
 
         return $this->redirectToRoute('arturdoruch_eventlogger_log_list');
     }
-
 
     /**
      * Change state of the log.
@@ -293,8 +290,8 @@ class LogController extends Controller
                 $log = $this->logDriver->changeState($data['state'], $id);
 
                 return new JsonResponse($this->logPropertyCollection->logToArray($log));
-            } catch (\Exception $e) {
-                return new Response($e->getMessage(), 400);
+            } catch (\Throwable $e) {
+                return new Response($this->createErrorMessage($e, 'Log state changing'), 400);
             }
         }
 
@@ -326,8 +323,8 @@ class LogController extends Controller
                 $result = $this->changeLogsState($data['state'], $data['ids']);
 
                 return new JsonResponse($result);
-            } catch (\Exception $e) {
-                return new Response($e->getMessage(), 400);
+            } catch (\Throwable $e) {
+                return new Response($this->createErrorMessage($e, 'Logs state changing'), 400);
             }
         }
 
@@ -391,5 +388,11 @@ class LogController extends Controller
         }
 
         return $data;
+    }
+
+
+    private function createErrorMessage(\Throwable $e, string $action): string
+    {
+        return $action . ' error' . ($this->getParameter('kernel.environment') === 'prod' ? '.' :  ': ' . $e->getMessage());
     }
 }
