@@ -11,7 +11,6 @@ use ArturDoruch\EventLoggerBundle\Templating\CssClassHelper;
 use ArturDoruch\ListBundle\ItemList;
 use ArturDoruch\ListBundle\Paginator;
 use ArturDoruch\ListBundle\Request\QueryParameterBag;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Extension\Core\Type as FormType;
@@ -53,11 +52,8 @@ class LogController extends Controller
      *     "/purge",
      *     methods={"GET"}
      * )
-     * @Template("@ArturDoruchEventLogger/log/purge_list.html.twig")
-     *
-     * @return array
      */
-    public function purgeListAction(Request $request)
+    public function purgeListAction()
     {
         $categories = [];
 
@@ -68,7 +64,7 @@ class LogController extends Controller
             ];
         }
 
-        return ['categories' => $categories];
+        return $this->render('@ArturDoruchEventLogger/log/purge_list.html.twig', ['categories' => $categories]);
     }
 
     /**
@@ -108,7 +104,6 @@ class LogController extends Controller
      *     "/",
      *     methods={"GET"}
      * )
-     * @Template("@ArturDoruchEventLogger/log/list.html.twig")
      */
     public function listAction(Request $request)
     {
@@ -142,36 +137,14 @@ class LogController extends Controller
 
         //$this->logPropertyCollection->get('category')->listable(!$form->get('category')->getData());
 
-        return [
+        return $this->render('@ArturDoruchEventLogger/log/list.html.twig', [
             'logList' => new ItemList($pagination, $form),
             'logStates' => LogStates::all(),
             'cssClassHelper' => new CssClassHelper(),
             'showCategory' => !$form->get('category')->getData(),
             'listableProperties' => $this->logPropertyCollection->getListable()
-        ];
+        ]);
     }
-
-    /*
-     * @param FormInterface $form
-     * @return array
-     */
-    /*private function getFormErrors(FormInterface $form)
-    {
-        $errors = [];
-
-        foreach ($form->getErrors() as $error) {
-            $errors[] = $error->getMessage();
-        }
-
-        foreach ($form->all() as $childForm) {
-            if ($childForm instanceof FormInterface && ($childErrors = $this->getFormErrors($childForm))) {
-                $name = $form->getName() . '[' . $childForm->getName() . ']';
-                $errors[$name] = $childErrors;
-            }
-        }
-
-        return $errors;
-    }*/
 
     /**
      * @Route(
