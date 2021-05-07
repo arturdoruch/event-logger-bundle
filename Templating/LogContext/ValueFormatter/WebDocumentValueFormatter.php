@@ -3,7 +3,6 @@
 namespace ArturDoruch\EventLoggerBundle\Templating\LogContext\ValueFormatter;
 
 use ArturDoruch\Json\JsonUtils;
-use ArturDoruch\Util\StringUtils;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -54,7 +53,7 @@ class WebDocumentValueFormatter extends AbstractValueFormatter
             return false;
         }
 
-        if (StringUtils::startsWith(self::DOCUMENT_PREFIX, $value)) {
+        if (strpos($value, self::DOCUMENT_PREFIX) === 0) {
             return true;
         }
 
