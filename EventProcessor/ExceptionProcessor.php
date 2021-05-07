@@ -3,8 +3,9 @@
 namespace ArturDoruch\EventLoggerBundle\EventProcessor;
 
 use ArturDoruch\EventLoggerBundle\Event;
-use ArturDoruch\Tool\ExceptionFormatter\ExceptionFormatter;
-use ArturDoruch\Util\Json\UnexpectedJsonException;
+use ArturDoruch\ExceptionFormatter\ExceptionFormatter;
+use ArturDoruch\ExceptionFormatter\Exception\FormattedException;
+use ArturDoruch\Json\UnexpectedJsonException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 
 /**
@@ -30,7 +31,8 @@ class ExceptionProcessor implements EventProcessorInterface
             return;
         }
 
-        $exceptionContext = $this->createContext($e, $options['exception_trace'] ?? null);
+        $formattedException = $this->exceptionFormatter->format($e);
+        $exceptionContext = $this->createContext($formattedException, $options['exception_trace'] ?? null, false);
         $context = $event->getContext();
 
         if (isset($context['exception'])) {
@@ -43,23 +45,28 @@ class ExceptionProcessor implements EventProcessorInterface
     }
 
 
-    private function createContext(\Throwable $e, ?bool $addExceptionTrace): array
+    private function createContext(FormattedException $exception, ?bool $addTrace, bool $addMessage = true)
     {
-        $context = [
-            'class' => get_class($e),
-            'file' => $this->exceptionFormatter->shortenFilename($e->getFile()) . ' line ' . $e->getLine(),
-        ];
-
-        if ($addExceptionTrace === true || $addExceptionTrace === null && $e instanceof FatalErrorException) {
-            $context['trace'] = $this->exceptionFormatter->getTraceAsHtml($e);
+        if ($addMessage) {
+            $context['message'] = $addMessage;
         }
 
-        if (class_exists('\ArturDoruch\Util\Json\UnexpectedJsonException') && $e instanceof UnexpectedJsonException) {
-            $context['json'] = strlen($json = $e->getJson()) > 5000 ? substr($e->getJson(), 0, 5000) . '...' : $json;
+        $context['class'] = $exception->getClass();
+        $context['file'] = $exception->getFile() . ':' . $exception->getLine();
+
+        $original = $exception->getOriginal();
+
+        if ($addTrace === true || $addTrace === null && $original instanceof FatalErrorException) {
+            $context['trace'] = $exception->getTraceAsString();
         }
 
-        if ($e->getPrevious()) {
-            $context['previous'] = $this->createContext($e->getPrevious(), $addExceptionTrace);
+        if ($original instanceof UnexpectedJsonException) {
+            $json = $original->getJson();
+            $context['json'] = strlen($json) > 5000 ? mb_substr($json, 0, 5000) . '...' : $json;
+        }
+
+        if ($exception->getPrevious()) {
+            $context['previous'] = $this->createContext($exception->getPrevious(), $addTrace);
         }
 
         return $context;

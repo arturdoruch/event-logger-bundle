@@ -14,12 +14,12 @@
         "php": ">=7.0",
         "arturdoruch/class-validator": "dev-master",
         "arturdoruch/css-styles": "^1.0",
-        "arturdoruch/list-bundle": "^0.2.1",
-        "arturdoruch/tool": "^1.1.1",
+        "arturdoruch/exception-formatter": "dev-master",
         "arturdoruch/json": "^1.0",
-        "twig/string-extra": ">=2.12.1",
+        "arturdoruch/list-bundle": "^0.2.1",
         "symfony/form": "^3.0",
-        "symfony/framework-bundle": "^3.0"
+        "symfony/framework-bundle": "^3.0",
+        "twig/string-extra": ">=2.12.1"
     },
     "autoload": {
         "psr-4" : {
@@ -34,6 +34,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/arturdoruch/css-styles"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/exception-formatter"
         }
     ]
 }
