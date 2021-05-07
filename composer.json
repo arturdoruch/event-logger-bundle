@@ -12,9 +12,9 @@
     ],
     "require": {
         "php": ">=7.0",
-        "arturdoruch/class-validator": "dev-master",
+        "arturdoruch/class-validator": "^0.1",
         "arturdoruch/css-styles": "^1.0",
-        "arturdoruch/exception-formatter": "dev-master",
+        "arturdoruch/exception-formatter": "^0.1",
         "arturdoruch/json": "^1.0",
         "arturdoruch/list-bundle": "^0.2.1",
         "symfony/form": "^3.0",
