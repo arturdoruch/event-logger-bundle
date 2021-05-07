@@ -22,7 +22,7 @@ interface LogDriverInterface
     public function count(string $category): int;
 
     /**
-     * Gets query for getting logs collection (for using in paginator).
+     * Gets query (for using in paginator) fetching the logs.
      *
      * @param array $criteria
      * @param array $order The collection of order data (in format ["orderField" => "orderDirection"]) for sorting logs.
@@ -38,7 +38,7 @@ interface LogDriverInterface
      *
      * @return LogInterface
      */
-    public function prepare($logLocator);
+    public function prepare($logLocator): LogInterface;
 
     /**
      * Gets the log with id.
@@ -46,14 +46,14 @@ interface LogDriverInterface
      * @param mixed $id The log id.
      *
      * @return LogInterface
-     * @throws \ArturDoruch\EventLoggerBundle\Log\Driver\Exception\LogNotFoundException when log with id was not found.
+     * @throws LogNotFoundException when log with id was not found.
      */
     public function get($id): LogInterface;
 
     /**
      * Changes the log state.
      *
-     * @param int $state The log new state. One of the ArturDoruch\ScraperLogBundle\Log::STATE_* constant.
+     * @param int $state The log new state. One of the "ArturDoruch\ScraperLogBundle\Log::STATE_*" constant.
      * @param mixed $id The log id.
      *
      * @return LogInterface
