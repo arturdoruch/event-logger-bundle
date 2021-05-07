@@ -3,7 +3,6 @@
 namespace ArturDoruch\EventLoggerBundle\Log;
 
 use ArturDoruch\EventLoggerBundle\Log\Property\PropertyInterface;
-use ArturDoruch\Util\ArrayUtils;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
@@ -63,7 +62,8 @@ class LogPropertyCollectionBuilder
         }
 
         if ($previousProperty && ($index = $this->getPropertyIndex($previousProperty))) {
-            ArrayUtils::insert($this->properties, [$property], ++$index);
+            // Insert property into properties array at specific position.
+            array_splice($this->properties, ++$index, 0, [$property]);
         } else {
             $this->properties[] = $property;
         }
