@@ -2,8 +2,8 @@
 
 namespace ArturDoruch\EventLoggerBundle\DependencyInjection\Compiler;
 
+use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Log\Driver\LogDriverInterface;
-use ArturDoruch\Tool\ClassValidator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

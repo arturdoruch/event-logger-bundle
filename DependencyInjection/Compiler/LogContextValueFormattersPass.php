@@ -2,9 +2,9 @@
 
 namespace ArturDoruch\EventLoggerBundle\DependencyInjection\Compiler;
 
+use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Templating\LogContext\ValueFormatter\ValueFormatterInterface;
 use ArturDoruch\EventLoggerBundle\Templating\LogContext\ValueFormatter\ValueFormatterManager;
-use ArturDoruch\Tool\ClassValidator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

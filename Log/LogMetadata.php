@@ -3,7 +3,7 @@
 namespace ArturDoruch\EventLoggerBundle\Log;
 
 use ArturDoruch\EventLoggerBundle\Log;
-use ArturDoruch\Tool\ClassValidator;
+use ArturDoruch\ClassValidator\ClassValidator;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>

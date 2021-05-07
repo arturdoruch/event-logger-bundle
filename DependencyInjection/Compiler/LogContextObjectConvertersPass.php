@@ -2,10 +2,10 @@
 
 namespace ArturDoruch\EventLoggerBundle\DependencyInjection\Compiler;
 
+use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Templating\LogContext\ObjectConverter\DefaultObjectConverter;
 use ArturDoruch\EventLoggerBundle\Templating\LogContext\ObjectConverter\ObjectConverterInterface;
 use ArturDoruch\EventLoggerBundle\Templating\LogContext\ObjectConverter\ObjectConverterManager;
-use ArturDoruch\Tool\ClassValidator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": ">=7.0",
+        "arturdoruch/class-validator": "dev-master",
         "arturdoruch/css-styles": "^1.0",
         "arturdoruch/list-bundle": "^0.2.1",
         "arturdoruch/tool": "^1.1.1",
@@ -24,5 +25,15 @@
         "psr-4" : {
             "ArturDoruch\\EventLoggerBundle\\": ""
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/class-validator"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/css-styles"
+        }
+    ]
 }

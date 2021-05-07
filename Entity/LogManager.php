@@ -2,9 +2,9 @@
 
 namespace ArturDoruch\EventLoggerBundle\Entity;
 
-use ArturDoruch\EventLoggerBundle\LogInterface;
+use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Log\LogPropertyCollection;
-use ArturDoruch\Tool\ClassValidator;
+use ArturDoruch\EventLoggerBundle\LogInterface;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\Mapping\ClassMetadata;

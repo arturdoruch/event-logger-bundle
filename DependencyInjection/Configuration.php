@@ -2,8 +2,8 @@
 
 namespace ArturDoruch\EventLoggerBundle\DependencyInjection;
 
+use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Log;
-use ArturDoruch\Tool\ClassValidator;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
