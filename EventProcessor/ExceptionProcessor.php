@@ -48,7 +48,7 @@ class ExceptionProcessor implements EventProcessorInterface
     private function createContext(FormattedException $exception, ?bool $addTrace, bool $addMessage = true)
     {
         if ($addMessage) {
-            $context['message'] = $addMessage;
+            $context['message'] = $exception->getMessage();
         }
 
         $context['class'] = $exception->getClass();
