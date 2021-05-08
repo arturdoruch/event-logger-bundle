@@ -16,8 +16,7 @@ class ExceptionProcessor implements EventProcessorInterface
     /**
      * @var ExceptionFormatter
      */
-    protected $exceptionFormatter;
-
+    private $exceptionFormatter;
 
     public function __construct(ExceptionFormatter $exceptionFormatter = null)
     {
@@ -45,7 +44,7 @@ class ExceptionProcessor implements EventProcessorInterface
     }
 
 
-    private function createContext(FormattedException $exception, ?bool $addTrace, bool $addMessage = true)
+    protected function createContext(FormattedException $exception, ?bool $addTrace, bool $addMessage = true): array
     {
         if ($addMessage) {
             $context['message'] = $exception->getMessage();
@@ -60,15 +59,26 @@ class ExceptionProcessor implements EventProcessorInterface
             $context['trace'] = $exception->getTraceAsString();
         }
 
-        if ($original instanceof UnexpectedJsonException) {
-            $json = $original->getJson();
-            $context['json'] = strlen($json) > 5000 ? mb_substr($json, 0, 5000) . '...' : $json;
-        }
+        $this->addExtraContext($context, $original);
 
         if ($exception->getPrevious()) {
             $context['previous'] = $this->createContext($exception->getPrevious(), $addTrace);
         }
 
         return $context;
+    }
+
+    /**
+     * Adds extra context getting from the exception class.
+     *
+     * @param array $context
+     * @param \Throwable $exception
+     */
+    protected function addExtraContext(array &$context, \Throwable $exception)
+    {
+        if ($exception instanceof UnexpectedJsonException) {
+            $json = $exception->getJson();
+            $context['json'] = strlen($json) > 5000 ? mb_substr($json, 0, 5000) . '...' : $json;
+        }
     }
 }
