@@ -15,21 +15,42 @@ viewing and managing logs of any event.
 
 ## Installation
 
-```sh
-composer require arturdoruch/event-logger-bundle
-```
+ 1. Add URLs to the required repositories (not published on the https://packagist.org) in `composer.json` file of your application
 
-Register this bundle and `ArturDoruchListBundle` in `AppKernel` class.
+    ```json
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/class-validator"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/css-styles"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/exception-formatter"
+        }
+    ]
+    ```
 
-```php
-public function registerBundles()
-{
-    $bundles = [
-        // Other bundles
-        new ArturDoruch\EventLoggerBundle\ArturDoruchEventLoggerBundle(),
-        new ArturDoruch\ListBundle\ArturDoruchListBundle(),
-    ];
-```
+ 2. Run the composer command
+
+    ```sh
+    composer require arturdoruch/event-logger-bundle
+    ```
+
+ 3. Register this and the `ArturDoruchListBundle` bundles in `Kernel` class
+
+    ```php
+    public function registerBundles()
+    {
+        $bundles = [
+            // Other bundles
+            new ArturDoruch\EventLoggerBundle\ArturDoruchEventLoggerBundle(),
+            new ArturDoruch\ListBundle\ArturDoruchListBundle(),
+        ];
+    ```
 
 ### Frontend
 
