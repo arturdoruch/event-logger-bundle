@@ -60,6 +60,7 @@ class ArturDoruchEventLoggerExtension extends Extension
         $metadataDefinition = new Definition(LogMetadata::class, [$logConfig['class'], $filterFormConfig]);
         $propertyCollectionDefinition = new Definition(LogPropertyCollection::class);
         $propertyCollectionDefinition->setFactory([$metadataDefinition, 'getPropertyCollection']);
+        $propertyCollectionDefinition->setPublic(true);
 
         $container->setDefinition('arturdoruch_eventlogger.log_metadata', $metadataDefinition);
         $container->setDefinition('arturdoruch_eventlogger.log_property_collection', $propertyCollectionDefinition);

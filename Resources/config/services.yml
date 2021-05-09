@@ -1,14 +1,19 @@
 services:
+    ArturDoruch\EventLoggerBundle\EventLogger:
+        alias: arturdoruch_eventlogger.event_logger
+        public: false
+
     arturdoruch_eventlogger.event_logger:
         class: ArturDoruch\EventLoggerBundle\EventLogger
-        autowire: true
+        arguments: ['@arturdoruch_eventlogger.log_metadata']
 
     arturdoruch_eventlogger.event_processor.exception_processor:
         class: ArturDoruch\EventLoggerBundle\EventProcessor\ExceptionProcessor
 
     arturdoruch_eventlogger.database_log_handler:
         class: ArturDoruch\EventLoggerBundle\Log\Handler\DatabaseLogHandler
-        autowire: true
+        arguments: ['@arturdoruch_eventlogger.entity_log_manager']
+        public: true
 
     # Log viewing
     arturdoruch_eventlogger.entity_log_manager:
@@ -29,8 +34,7 @@ services:
         class: ArturDoruch\EventLoggerBundle\Form\LogFilterType
         arguments: ['@arturdoruch_eventlogger.log_property_collection']
         public: false
-        tags:
-            - { name: form.type }
+        tags: ['form.type']
 
     arturdoruch_eventlogger.twig.misc_extension:
         class: ArturDoruch\EventLoggerBundle\Twig\Extension\MiscExtension
@@ -40,7 +44,9 @@ services:
 
     arturdoruch_eventlogger.twig.log_context_extension:
         class: ArturDoruch\EventLoggerBundle\Twig\Extension\LogContextExtension
-        autowire: true
+        arguments:
+            - '@arturdoruch_eventlogger.templating.log_context.object_converter_manager'
+            - '@arturdoruch_eventlogger.templating.log_context.value_formatter_manager'
         public: false
         tags: ['twig.extension']
 
