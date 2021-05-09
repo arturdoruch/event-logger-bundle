@@ -11,7 +11,6 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
         "arturdoruch/class-validator": "^0.1",
         "arturdoruch/css-styles": "^1.0",
         "arturdoruch/exception-formatter": "^0.1",
