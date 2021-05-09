@@ -3,8 +3,8 @@
 namespace ArturDoruch\EventLoggerBundle\EventProcessor;
 
 use ArturDoruch\EventLoggerBundle\Event;
-use ArturDoruch\ExceptionFormatter\ExceptionFormatter;
 use ArturDoruch\ExceptionFormatter\Exception\FormattedException;
+use ArturDoruch\ExceptionFormatter\ExceptionFormatter;
 use ArturDoruch\Json\UnexpectedJsonException;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 
@@ -18,20 +18,62 @@ class ExceptionProcessor implements EventProcessorInterface
      */
     private $exceptionFormatter;
 
-    public function __construct(ExceptionFormatter $exceptionFormatter = null)
+    private $options = [
+        'shorten_filename' => true,
+        'argument_max_length' => 1000,
+        'templates' => []
+    ];
+
+    /**
+     * @var array
+     */
+    private $processOptions;
+
+    /**
+     * @param array $options Exception trace formatting options.
+     *  - shorten_filename (bool) default: true
+     *  - argument_max_length (int) default: 1000
+     *  - templates (array)
+     */
+    public function __construct(array $options = [])
     {
-        $this->exceptionFormatter = $exceptionFormatter ?: new ExceptionFormatter(__DIR__ . '/../../../../');
+        $options += $this->options;
+        $this->processOptions = [
+            'exception_trace_argument_max_length' => $options['argument_max_length'],
+            'exception_trace' => null,
+        ];
+
+        if ($options['shorten_filename'] === true) {
+            $options['file_base_dir'] = __DIR__ . '/../../../../';
+        }
+
+        $this->exceptionFormatter = new ExceptionFormatter($options, $options['templates']);
     }
 
-
+    /**
+     * {@inheritdoc}
+     *
+     * @param array $options
+     *
+     *  - exception_trace (bool|null) default: null
+     *    Whether to add exception trace to the context. If null trace will be added only for the
+     *    Symfony\Component\Debug\Exception\FatalErrorException.
+     *
+     *  - exception_trace_argument_max_length (int) default: Value specified in __construct() "argument_max_length" option.
+     *    Maximum length of the function argument with type of string in exception trace entry.
+     *    The longer string will be truncated. If 0 not limit will be used.
+     */
     public function process(string $level, Event $event, array &$options)
     {
         if (!$e = $event->getThrowable()) {
             return;
         }
 
+        $options += $this->processOptions;
+        $this->exceptionFormatter->setArgumentMaxLength($options['exception_trace_argument_max_length']);
         $formattedException = $this->exceptionFormatter->format($e);
-        $exceptionContext = $this->createContext($formattedException, $options['exception_trace'] ?? null, false);
+
+        $exceptionContext = $this->createContext($formattedException, $options['exception_trace'], false);
         $context = $event->getContext();
 
         if (isset($context['exception'])) {
