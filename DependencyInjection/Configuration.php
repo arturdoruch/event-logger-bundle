@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
                     })
                     ->end()
                     ->prototype('scalar')->end()
+                    // todo Add "options" config.
                 ->end()
                 ->append($this->createLogNode())
                 ->append($this->createLogViewingNode())
@@ -68,22 +69,20 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('class')
                     ->cannotBeEmpty()->defaultValue(Log::class)
                     ->beforeNormalization()
-                        ->always(function ($v) {
-                            if ($v) {
-                                ClassValidator::validateSubclassOf($v, Log::class, 'log');
-                            }
+                    ->ifString()->then(function ($v) {
+                        ClassValidator::validateSubclassOf($v, Log::class, 'log');
 
-                            return $v;
-                        })
+                        return $v;
+                    })
                     ->end()
                 ->end()
                 ->scalarNode('entity_class')->cannotBeEmpty()
                 ->end()
                 ->arrayNode('handler_services')
                     ->beforeNormalization()
-                        ->ifString()->then(function ($v) {
-                            return [$v];
-                        })
+                    ->ifString()->then(function ($v) {
+                        return [$v];
+                    })
                     ->end()
                     ->scalarPrototype()->end()
                     ->requiresAtLeastOneElement()
@@ -124,13 +123,9 @@ class Configuration implements ConfigurationInterface
                         ->arrayNode('value_formatters')
                             ->arrayPrototype()
                                 ->beforeNormalization()
-                                    ->always(function ($v) {
-                                        if (is_string($v)) {
-                                            $v = ['class' => $v];
-                                        }
-
-                                        return $v;
-                                    })
+                                ->ifString()->then(function ($v) {
+                                    return ['class' => $v];
+                                })
                                 ->end()
                                 ->children()
                                     ->scalarNode('class')
