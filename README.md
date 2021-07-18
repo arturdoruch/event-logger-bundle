@@ -15,10 +15,14 @@ viewing and managing logs of any event.
 
 ## Installation
 
- 1. Add URLs to the required repositories (not published on the https://packagist.org) in `composer.json` file of your application
+ 1. Add URLs to the repository and related repositories (not published on the https://packagist.org) in `composer.json` file of your application
 
     ```json
     "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/arturdoruch/event-logger-bundle"
+        },
         {
             "type": "vcs",
             "url": "https://github.com/arturdoruch/class-validator"
