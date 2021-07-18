@@ -10,7 +10,8 @@ use ArturDoruch\EventLoggerBundle\Event;
 interface EventProcessorInterface
 {
     /**
-     * Modify event context or category.
+     * Allows to modify the event context and category, and event processor options
+     * depend on the event properties.
      *
      * @param string $level The log level.
      * @param Event $event
