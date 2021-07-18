@@ -5,7 +5,7 @@ namespace ArturDoruch\EventLoggerBundle\Form;
 use ArturDoruch\EventLoggerBundle\Log\LogPropertyCollection;
 use ArturDoruch\EventLoggerBundle\Log\Property\DateTimeProperty;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type as Type;
+use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
