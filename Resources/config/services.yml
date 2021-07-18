@@ -53,3 +53,11 @@ services:
     twig.extension.string:
         class: Twig\Extra\String\StringExtension
         tags: ['twig.extension']
+
+    arturdoruch_eventlogger.controller.log_controller:
+        class: ArturDoruch\EventLoggerBundle\Controller\LogController
+        arguments:
+            - '@arturdoruch_eventlogger.database_log_driver'
+            - '@arturdoruch_eventlogger.log_property_collection'
+        tags: ['controller.service_arguments']
+        public: true

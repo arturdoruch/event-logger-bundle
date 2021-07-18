@@ -16,8 +16,8 @@
         "arturdoruch/exception-formatter": "^0.1",
         "arturdoruch/json": "^1.0",
         "arturdoruch/list-bundle": "^0.2.1",
-        "symfony/form": "^3.0",
-        "symfony/framework-bundle": "^3.0",
+        "symfony/form": "^3.3|^4.0|^5.0",
+        "symfony/framework-bundle": "^3.3|^4.0|^5.0",
         "twig/string-extra": ">=2.12.1"
     },
     "autoload": {

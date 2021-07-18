@@ -42,7 +42,9 @@ viewing and managing logs of any event.
 
  3. Register this and the `ArturDoruchListBundle` bundles in `Kernel` class
 
+    In Symfony 3
     ```php
+    // app/AppKernel.php
     public function registerBundles()
     {
         $bundles = [
@@ -50,6 +52,15 @@ viewing and managing logs of any event.
             new ArturDoruch\EventLoggerBundle\ArturDoruchEventLoggerBundle(),
             new ArturDoruch\ListBundle\ArturDoruchListBundle(),
         ];
+    ```
+    In Symfony >= 4
+    ```php
+    // config/bundles.php
+    return [
+        // Other bundles
+        ArturDoruch\EventLoggerBundle\ArturDoruchEventLoggerBundle::class => ['all' => true],
+        ArturDoruch\ListBundle\ArturDoruchListBundle::class => ['all' => true],
+    ];
     ```
 
 ### Frontend

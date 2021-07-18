@@ -11,18 +11,17 @@ use ArturDoruch\EventLoggerBundle\Templating\CssClassHelper;
 use ArturDoruch\ListBundle\ItemList;
 use ArturDoruch\ListBundle\Paginator;
 use ArturDoruch\ListBundle\Request\QueryParameterBag;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type as FormType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @author Artur Doruch <arturdoruch@interia.pl>
  */
-class LogController extends Controller
+class LogController extends AbstractController
 {
     /**
      * @var LogDriverInterface
@@ -30,30 +29,24 @@ class LogController extends Controller
     private $logDriver;
 
     /**
-     * @var array
-     */
-    private $logCategories;
-
-    /**
      * @var LogPropertyCollection
      */
     private $logPropertyCollection;
 
-    public function setContainer(ContainerInterface $container = null)
+    /**
+     * @var array
+     */
+    private $logCategories;
+
+    public function __construct(LogDriverInterface $logDriver, LogPropertyCollection $logPropertyCollection)
     {
-        parent::setContainer($container);
-        $this->logDriver = $this->get('arturdoruch_eventlogger.log_driver');
-        $this->logPropertyCollection = $this->get('arturdoruch_eventlogger.log_property_collection');
-        $this->logCategories = $this->logPropertyCollection->get('category')->getFilterFormChoices();
+        $this->logDriver = $logDriver;
+        $this->logPropertyCollection = $logPropertyCollection;
+        $this->logCategories = $logPropertyCollection->get('category')->getFilterFormChoices();
     }
 
-    /**
-     * @Route(
-     *     "/purge",
-     *     methods={"GET"}
-     * )
-     */
-    public function purgeListAction()
+
+    public function purgeList()
     {
         $categories = [];
 
@@ -67,13 +60,8 @@ class LogController extends Controller
         return $this->render('@ArturDoruchEventLogger/log/purge_list.html.twig', ['categories' => $categories]);
     }
 
-    /**
-     * @Route(
-     *     "/purge/{token}",
-     *     methods={"POST"}
-     * )
-     */
-    public function purgeAction($token, Request $request)
+
+    public function purge($token, Request $request)
     {
         if (!$this->isCsrfTokenValid('purge', $token)) {
             return new Response('Invalid CSRF Token.', 404);
@@ -99,15 +87,10 @@ class LogController extends Controller
 
     /**
      * @todo Display filter form errors when request is type of XHR.
-     *
-     * @Route(
-     *     "/",
-     *     methods={"GET"}
-     * )
      */
-    public function listAction(Request $request)
+    public function list(Request $request, FormFactoryInterface $formFactory)
     {
-        $form = $this->get('form.factory')->createNamed('filter', LogFilterType::class);
+        $form = $formFactory->createNamed('filter', LogFilterType::class);
         $form->handleRequest($request);
 
         $parameterBag = new QueryParameterBag($request);
@@ -129,7 +112,7 @@ class LogController extends Controller
 
         $query = $this->logDriver->getQuery($criteria, $parameterBag->getSort('createdAt', 'desc'));
         $pagination = Paginator::paginate($query, $parameterBag->getPage(), $parameterBag->getLimit(100));
-        $pagination->setItemLimits($this->getParameter('arturdoruch_eventlogger.log.list_item_limits'));
+        $pagination->setItemLimits($this->container->getParameter('arturdoruch_eventlogger.log.list_item_limits'));
 
         foreach ($pagination->getItems() as &$log) {
             $log = $this->logDriver->prepare($log);
@@ -146,13 +129,8 @@ class LogController extends Controller
         ]);
     }
 
-    /**
-     * @Route(
-     *      "/{id}",
-     *      methods={"GET"}
-     * )
-     */
-    public function showAction($id, Request $request)
+
+    public function show($id, Request $request)
     {
         try {
             $log = $this->logDriver->get($id);
@@ -182,17 +160,12 @@ class LogController extends Controller
         }
     }
 
-    /**
-     * @Route(
-     *      "/remove/{id}/{token}",
-     *      methods={"DELETE", "POST"}
-     * )
-     */
-    public function removeAction($id, $token, Request $request)
+
+    public function remove($id, $token, Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             try {
-                $this->removeLog($id, $token);
+                $this->doRemove($id, $token);
 
                 return new Response(sprintf('Log with id <b>%s</b> has been removed.', $id));
             } catch (\Throwable $e) {
@@ -200,7 +173,7 @@ class LogController extends Controller
             }
         }
 
-        $this->removeLog($id, $token);
+        $this->doRemove($id, $token);
 
         return $this->redirectToRoute('arturdoruch_eventlogger_log_list');
     }
@@ -209,7 +182,7 @@ class LogController extends Controller
      * @param string $id
      * @param string $token
      */
-    private function removeLog($id, $token)
+    private function doRemove($id, $token)
     {
         if (!$this->isCsrfTokenValid('remove', $token)) {
             throw new \InvalidArgumentException('Invalid CSRF Token.');
@@ -218,15 +191,8 @@ class LogController extends Controller
         $this->logDriver->remove([$id]);
     }
 
-    /**
-     * @Route(
-     *      "/remove",
-     *      methods={"POST"},
-     * )
-     *
-     * condition="request.headers.get('X-Requested-With') == 'XMLHttpRequest'"
-     */
-    public function removeManyAction(Request $request)
+
+    public function removeMany(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             try {
@@ -248,14 +214,9 @@ class LogController extends Controller
     }
 
     /**
-     * Change state of the log.
-     *
-     * @Route(
-     *      "/change-state/{id}",
-     *      methods={"POST", "PATCH"},
-     * )
+     * Changes state of the log.
      */
-    public function changeStateAction($id, Request $request)
+    public function changeState($id, Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             try {
@@ -281,14 +242,9 @@ class LogController extends Controller
     /**
      * Changes state of many logs.
      *
-     * @Route(
-     *      "/change-state",
-     *      methods={"POST"},
-     * )
-     *
      * condition="request.headers.get('X-Requested-With') == 'XMLHttpRequest'"
      */
-    public function changeStateManyAction(Request $request)
+    public function changeStateMany(Request $request)
     {
         if ($request->isXmlHttpRequest()) {
             try {
@@ -304,20 +260,18 @@ class LogController extends Controller
         $data = $this->getRequestData($request, true);
         $this->changeLogsState($data['state'], $ids = $data['ids'] ?? []);
 
-        $this->addFlash('success', sprintf(
-            'Changed state to <b>%s</b> of the <b>%d</b> logs.', $data['state'], count($ids)
-        ));
+        $this->addFlash('success', sprintf('Changed state to <b>%s</b> of the <b>%d</b> logs.', $data['state'], count($ids)));
 
         return $this->redirectToRoute('arturdoruch_eventlogger_log_list');
     }
 
     /**
-     * @param array $ids The log ids.
      * @param int $state
+     * @param array $ids The log ids.
      *
      * @return array
      */
-    private function changeLogsState($state, array $ids)
+    private function changeLogsState($state, array $ids): array
     {
         $success = [];
         $failure = [];
@@ -366,6 +320,6 @@ class LogController extends Controller
 
     private function createErrorMessage(\Throwable $e, string $action): string
     {
-        return $action . ' error' . ($this->getParameter('kernel.environment') === 'prod' ? '.' :  ': ' . $e->getMessage());
+        return $action . ' error' . ($this->container->getParameter('kernel.environment') === 'prod' ? '.' :  ': ' . $e->getMessage());
     }
 }

@@ -5,6 +5,7 @@ namespace ArturDoruch\EventLoggerBundle\DependencyInjection;
 use ArturDoruch\ClassValidator\ClassValidator;
 use ArturDoruch\EventLoggerBundle\Log;
 use Psr\Log\LogLevel;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
@@ -16,13 +17,10 @@ class Configuration implements ConfigurationInterface
 {
     private $name = 'artur_doruch_event_logger';
 
-
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root($this->name);
-
-        $rootNode
+        $node = $this->createRootNode($this->name, $treeBuilder);
+        $node
             ->children()
                 ->arrayNode('event_processor_services')
                     ->beforeNormalization()
@@ -43,9 +41,7 @@ class Configuration implements ConfigurationInterface
 
     private function createLogNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('log');
-
+        $node = $this->createRootNode('log');
         $node
             ->isRequired()
             ->beforeNormalization()
@@ -95,9 +91,7 @@ class Configuration implements ConfigurationInterface
 
     private function createLogViewingNode()
     {
-        $builder = new TreeBuilder();
-        $node = $builder->root('log_viewing');
-
+        $node = $this->createRootNode('log_viewing');
         $node
             ->isRequired()
             ->children()
@@ -187,5 +181,13 @@ class Configuration implements ConfigurationInterface
             ->end();
 
         return $node;
+    }
+
+
+    private function createRootNode(string $name, TreeBuilder &$treeBuilder = null): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder($name);
+
+        return method_exists($treeBuilder, 'getRootNode') ? $treeBuilder->getRootNode() : $treeBuilder->root($name);
     }
 }
