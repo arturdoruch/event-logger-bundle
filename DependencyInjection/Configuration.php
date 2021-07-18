@@ -21,6 +21,28 @@ class Configuration implements ConfigurationInterface
     {
         $node = $this->createRootNode($this->name, $treeBuilder);
         $node
+            ->beforeNormalization()
+            ->always(function ($v) {
+                $log = $v['log'] ?? [];
+
+                if (!array_key_exists('entity_class', $log)) {
+                    if (($v['log_viewing']['driver_service'] ?? null) === 'arturdoruch_eventlogger.database_log_driver') {
+                        $configDetails = ['arturdoruch_eventlogger.database_log_driver', 'log_viewing.driver_service'];
+                    } elseif (in_array('arturdoruch_eventlogger.database_log_handler', $log['handler_services'] ?? [])) {
+                        $configDetails = ['arturdoruch_eventlogger.database_log_handler', 'log.handler_services'];
+                    } else {
+                        return $v;
+                    }
+
+                    throw new InvalidConfigurationException(sprintf(
+                        'The key "entity_class" at path "%s.log" must be configured. It is required by the "%s" service configured at the "%s" config option.',
+                        $this->name, $configDetails[0], $configDetails[1]
+                    ));
+                }
+
+                return $v;
+            })
+            ->end()
             ->children()
                 ->arrayNode('event_processor_services')
                     ->beforeNormalization()
@@ -44,23 +66,6 @@ class Configuration implements ConfigurationInterface
         $node = $this->createRootNode('log');
         $node
             ->isRequired()
-            ->beforeNormalization()
-            ->always(function ($v) {
-                if (empty($v['entity_class']) &&
-                    (isset($v['driver_service']) && $v['driver_service'] === 'arturdoruch_eventlogger.database_log_driver'
-                    || isset($v['handler_services']) && in_array('arturdoruch_eventlogger.database_log_handler', $v['handler_services']))
-                ) {
-                    throw new InvalidConfigurationException(sprintf(
-                        'The key "entity_class" at path "%s.log" must be configured' .
-                        ' (Required by configured "arturdoruch_eventlogger.database_log_driver"' .
-                        ' and "arturdoruch_eventlogger.database_log_handler" services).',
-                        $this->name
-                    ));
-                }
-
-                return $v;
-            })
-            ->end()
             ->children()
                 ->scalarNode('class')
                     ->cannotBeEmpty()->defaultValue(Log::class)
@@ -104,7 +109,7 @@ class Configuration implements ConfigurationInterface
                     ->info('The log context template.')
                 ->end()
                 ->scalarNode('driver_service')
-                    ->info('Service name of the log driver to use by LogController to view and manage logs.')
+                    ->info('Service name of the log driver to use by the LogController to view and manage logs.')
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
