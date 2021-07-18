@@ -45,13 +45,16 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->children()
                 ->arrayNode('event_processor_services')
+                    ->info('Service ids of the class processing event log before passing to the LogHandlerInterface::handle().'
+                        . ' You can use the build-it "arturdoruch_eventlogger.event_processor.exception_processor" service.'
+                    )
                     ->beforeNormalization()
                     ->ifString()->then(function ($v) {
                         return [$v];
                     })
                     ->end()
-                    ->prototype('scalar')->end()
-                    // todo Add "options" config.
+                    ->scalarPrototype()->end()
+                    // todo Add the "options" config.
                 ->end()
                 ->append($this->createLogNode())
                 ->append($this->createLogViewingNode())
@@ -80,10 +83,15 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('entity_class')->cannotBeEmpty()
                 ->end()
                 ->arrayNode('handler_services')
+                    ->info('Service ids of the class saving event log to the specific storage.'
+                        . ' If you want to storing logs in database you can use the built-it "arturdoruch_eventlogger.database_log_handler" service.'
+                    )
+                    ->isRequired()
+                    ->requiresAtLeastOneElement()
                     ->beforeNormalization()
-                    ->ifString()->then(function ($v) {
-                        return [$v];
-                    })
+                        ->ifString()->then(function ($v) {
+                            return [$v];
+                        })
                     ->end()
                     ->scalarPrototype()->end()
                     ->requiresAtLeastOneElement()
@@ -109,7 +117,9 @@ class Configuration implements ConfigurationInterface
                     ->info('The log context template.')
                 ->end()
                 ->scalarNode('driver_service')
-                    ->info('Service name of the log driver to use by the LogController to view and manage logs.')
+                    ->info('Service id of the log driver for using by the LogController to view and manage logs.'
+                        . ' You can use the build-it "arturdoruch_eventlogger.database_log_driver" service.'
+                    )
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
