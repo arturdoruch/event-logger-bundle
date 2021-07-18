@@ -26,9 +26,11 @@ class LogMetadata
      */
     public function __construct(string $className, array $filterFormConfig)
     {
-        $this->className = $className;
-        ClassValidator::validateSubclassOf($className, Log::class, 'log');
+        if ($className !== Log::class) {
+            ClassValidator::validateSubclassOf($className, Log::class, 'log');
+        }
 
+        $this->className = $className;
         $builder = new LogPropertyCollectionBuilder($filterFormConfig);
 
         Log::buildDefaultPropertyCollection($builder);
