@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\MappedSuperclass(repositoryClass="ArturDoruch\EventLoggerBundle\Entity\LogRepository")
  * @ORM\Table(
  *      indexes={
- *          @ORM\Index(columns={"channel"}),
+ *          @ORM\Index(columns={"category"}),
  *          @ORM\Index(columns={"level"}),
  *          @ORM\Index(columns={"action"})
  *      }
