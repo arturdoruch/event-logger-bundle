@@ -71,6 +71,7 @@ class LogFilterType extends AbstractType
                 'required' => false,
                 'widget' => 'single_text',
                 'format' => $format,
+                'html5' => false,
                 'attr' => [
                     'data-type' => 'date',
                     'data-format' => $format,
