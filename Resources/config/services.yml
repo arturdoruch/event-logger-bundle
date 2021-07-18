@@ -60,4 +60,5 @@ services:
             - '@arturdoruch_eventlogger.database_log_driver'
             - '@arturdoruch_eventlogger.log_property_collection'
         tags: ['controller.service_arguments']
-        public: true
+        calls:
+            - ['setContainer', ['@service_container']]
