@@ -4,9 +4,9 @@
 
 import $ from 'jquery';
 import eventRegistry from '@arturdoruch/event-registry';
-import LogController from './LogController';
-import httpClient from './../log/http-client';
-import LogTable from './../log/LogTable';
+import LogController from './LogController.js';
+import httpClient from './../log/http-client.js';
+import LogTable from './../log/LogTable.js';
 
 let instance;
 /**

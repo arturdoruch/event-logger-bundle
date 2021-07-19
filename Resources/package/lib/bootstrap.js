@@ -3,12 +3,12 @@
  */
 
 import './../styles/log.css';
-import LogController from './controller/LogController';
-import LogListController from './controller/LogListController';
+import LogController from './controller/LogController.js';
+import LogListController from './controller/LogListController.js';
 
 import '@arturdoruch/list/styles/list.css';
-import ListController from '@arturdoruch/list/lib/ListController';
-import FilterForm from '@arturdoruch/list/lib/FilterForm';
+import ListController from '@arturdoruch/list/lib/ListController.js';
+import FilterForm from '@arturdoruch/list/lib/FilterForm.js';
 
 const listTableSelector = '#ad-log__list';
 const listContainerSelector = '#ad-log__list-container';

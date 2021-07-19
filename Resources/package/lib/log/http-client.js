@@ -2,7 +2,7 @@
  * (c) Artur Doruch <arturdoruch@interia.pl>
  */
 
-import ajax from '@arturdoruch/helper/lib/ajax';
+import ajax from '@arturdoruch/helper/lib/ajax.js';
 
 export default {
     /**

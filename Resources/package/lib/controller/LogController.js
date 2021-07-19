@@ -4,14 +4,14 @@
 
 import $ from 'jquery';
 import eventRegistry from '@arturdoruch/event-registry';
-import scrollBar from '@arturdoruch/browser/lib/scroll-bar';
 import FlashMessenger from '@arturdoruch/flash-messenger';
-import screenUtils from '@arturdoruch/util/lib/screen-utils';
-import stringUtils from '@arturdoruch/util/lib/string-utils';
-import contentEvents from '@arturdoruch/ui/lib/content-events';
-import httpClient from './../log/http-client';
-import loadEventDispatcher from './../log/load-event-dispatcher';
-import stateHelper from './../log/state-helper';
+import scrollBar from '@arturdoruch/browser/lib/scroll-bar.js';
+import screenUtils from '@arturdoruch/util/lib/screen-utils.js';
+import stringUtils from '@arturdoruch/util/lib/string-utils.js';
+import contentEvents from '@arturdoruch/ui/lib/content-events.js';
+import httpClient from './../log/http-client.js';
+import loadEventDispatcher from './../log/load-event-dispatcher.js';
+import stateHelper from './../log/state-helper.js';
 
 let instance;
 let isDetailPage = true;

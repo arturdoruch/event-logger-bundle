@@ -4,7 +4,7 @@
 
 import $ from 'jquery';
 import eventRegistry from '@arturdoruch/event-registry';
-import stateHelper from './state-helper';
+import stateHelper from './state-helper.js';
 
 export default class LogTable {
     /**
