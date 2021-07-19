@@ -15,7 +15,7 @@ Import bootstrap file on the pages with log list and log details.
 
 ```js
 // Application main js file.
-import '@arturdoruch/log/lib/bootstrap';
+import '@arturdoruch/event-logger-bundle/lib/bootstrap';
 
 // Set globally ProcessNoticer for AJAX requests.
 //import '@arturdoruch/process-noticer/styles/process-notice.css';
@@ -31,7 +31,7 @@ If you need to register events on the log HTML elements,
 add listener to the "load" event by calling the `LogController.addLoadListener()` method.
 
 ```js
-import LogController from '@arturdoruch/log/lib/controller/LogController';
+import LogController from '@arturdoruch/event-logger-bundle/lib/controller/LogController';
 
 LogController.addLoadListener(function ($log) {
     // Register some events on the log elements.
@@ -43,7 +43,7 @@ LogController.addLoadListener(function ($log) {
 On the log details page manually dispatch the "load" event by calling the `LogController.dispatchLoadEvent()` method.
 
 ```js
-import LogController from '@arturdoruch/log/lib/controller/LogController';
+import LogController from '@arturdoruch/event-logger-bundle/lib/controller/LogController';
 
 LogController.dispatchLoadEvent();
 ```
