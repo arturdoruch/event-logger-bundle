@@ -25,7 +25,6 @@ class LogRepository extends EntityRepository
     public function setLogPropertyCollection(LogPropertyCollection $logPropertyCollection)
     {
         $this->filterableProperties = $logPropertyCollection->getFilterable();
-
         $listableProperties = $logPropertyCollection->getListable();
         $this->fieldsToSelect = 'id, state';
 
@@ -35,7 +34,7 @@ class LogRepository extends EntityRepository
     }
 
     /**
-     * @param array $criteria The sql query criteria.
+     * @param array $criteria The SQL query criteria.
      * @param array $order
      *
      * @return QueryBuilder
@@ -94,7 +93,8 @@ class LogRepository extends EntityRepository
                 continue;
             }
 
-            if (empty($criteria[$name])) {
+            // Property is a string type.
+            if (!isset($criteria[$name]) || $criteria[$name] === '') {
                 continue;
             }
 
@@ -116,10 +116,7 @@ class LogRepository extends EntityRepository
         return $builder;
     }
 
-    /**
-     * @param string $category
-     * @return int
-     */
+
     public function countLogs(string $category): int
     {
         $qb = $this->createQueryBuilder('l')
