@@ -1,40 +1,40 @@
 arturdoruch_eventlogger_log_purgelist:
     path: /purge
     methods: GET
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::purgeList }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:purgeList }
 
 arturdoruch_eventlogger_log_purge:
     path: /purge/{token}
     methods: POST
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::purge }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:purge }
 
 arturdoruch_eventlogger_log_list:
     path: /
     methods: GET
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::list }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:list }
 
 arturdoruch_eventlogger_log_show:
     path: /{id}
     methods: GET
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::show }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:show }
 
 arturdoruch_eventlogger_log_changestatemany:
     path: /change-state
     methods: POST
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::changeStateMany }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:changeStateMany }
 
 arturdoruch_eventlogger_log_changestate:
     path: /change-state/{id}
     methods: [PATCH, POST]
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::changeState }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:changeState }
 
 arturdoruch_eventlogger_log_removemany:
     path: /remove
     methods: POST
     # condition="request.headers.get('X-Requested-With') == 'XMLHttpRequest'"
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::removeMany }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:removeMany }
 
 arturdoruch_eventlogger_log_remove:
     path: /remove/{id}/{token}
     methods: [DELETE, POST]
-    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller::remove }
+    defaults: { _controller: arturdoruch_eventlogger.controller.log_controller:remove }
